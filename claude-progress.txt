@@ -1,3 +1,27 @@
+## Session 65 - 2025-12-30 - Feature #65: Job status tracking
+
+### Ce qui a été fait
+- Feature #65 : Job status tracking ✓
+  - Créé src/core/job_tracker.py avec JobTracker + JobStatus (180 lignes)
+  - JobStatus enum : PENDING, EXTRACTING, COMPARING, COMPLETED, FAILED
+  - JobTracker classe pour gérer status dans Redis
+  - Méthodes : set_status(), get_status(), delete_status()
+  - TTL configurable (défaut: 24h)
+- Intégré dans tâche Celery :
+  - Track status durant cycle de vie extraction
+  - PENDING → EXTRACTING → COMPARING (si parallel) → COMPLETED/FAILED
+  - Status inclut metadata (file_path, strategy, success, error)
+  - Mises à jour automatiques à chaque étape
+- Permet monitoring en temps réel des jobs
+- Mis à jour `feature_list.json` : Feature #65 → "passing", completed: 65/152
+
+### État actuel
+- **Features complétées** : 65/152 (42.76%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79)
+- **Prochaine feature** : #66 - Mistral API client
+
+---
+
 ## Session 64 - 2025-12-30 - Feature #64: Celery extraction task
 
 ### Ce qui a été fait
