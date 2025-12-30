@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 22,
+  "completed": 24,
   "features": [
     {
       "id": 1,
@@ -209,7 +209,7 @@
       "name": "DoclingExtractor is_available check",
       "description": "Implement is_available() that verifies docling is installed and models are loaded",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "is_available() returns True when docling is properly configured"
     },
@@ -218,7 +218,7 @@
       "name": "DoclingExtractor error handling",
       "description": "Add try-catch for common errors: file not found, corrupted PDF, timeout",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Extract corrupted.pdf raises ExtractionError with clear message"
     },

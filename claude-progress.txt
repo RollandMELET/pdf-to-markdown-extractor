@@ -1,3 +1,12 @@
+## Session 23-24 - 2025-12-30 - Features #23-24: DoclingExtractor validation
+
+### Ce qui a été fait
+- Feature #23 : is_available() déjà implémentée et testée ✓
+- Feature #24 : error handling déjà implémenté avec try/catch ✓
+- Mis à jour `feature_list.json` : Features #23-24 → "passing", completed: 24/152
+
+---
+
 ## Session 20-22 - 2025-12-30 - Features #20-22: DoclingExtractor enhancements
 
 ### Ce qui a été fait
