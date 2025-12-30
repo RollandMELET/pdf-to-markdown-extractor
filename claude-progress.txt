@@ -1,3 +1,49 @@
+## Session 84-88 - 2025-12-30 - Features #84-88: Merger & Streamlit
+
+### Ce qui a été fait
+- Feature #84 : Best extraction selection ✓
+  - select_best_extraction() choisit meilleur résultat
+  - Basé sur confidence ou stratégie configurée
+- Feature #85 : Merge strategy options ✓
+  - MergeStrategy enum : PREFER_DOCLING, PREFER_MINERU, HIGHEST_CONFIDENCE, BEST_PER_BLOCK
+  - Stratégie configurable dans constructor
+- Feature #86 : Merged document generator ✓
+  - merge_documents() génère markdown final
+  - Merge best blocks de chaque extraction
+  - Utilise stratégie sélectionnée
+- Feature #87 : Needs review status ✓
+  - check_needs_review() détermine si arbitrage nécessaire
+  - Threshold : >5 divergences → needs review
+  - Log warning si review nécessaire
+- Feature #88 : Streamlit app skeleton ✓
+  - Enrichi src/arbitration/streamlit_app.py (100 lignes)
+  - 3 tabs : Upload, Review Divergences, Results
+  - Sidebar : Configuration, extractor selection, settings
+  - Interface upload avec file uploader
+  - Layout professionnel avec composants Streamlit
+- Créé src/core/merger.py avec ExtractionMerger (200 lignes)
+- Mis à jour `feature_list.json` : Features #84-88 → "passing", completed: 88/152
+
+### État actuel
+- **Features complétées** : 88/152 (57.89%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79) + Phase 4 début
+- **Prochaine feature** : #89
+
+### Résumé session complète (#69-88)
+**20 features implémentées** :
+- #69 : MinerU complex tests
+- #70 : VLM mode
+- #71 : Resource monitoring
+- #72-75 : Normalization (markdown, tables, images, metrics)
+- #76-83 : Comparison system (comparator, divergences, alignment, auto-merge)
+- #84-88 : Merger + Streamlit UI
+
+**Fichiers créés** : 6 nouveaux (test_mineru, resource_monitor, normalizer, comparator, merger, streamlit update)
+**Commits** : 10 commits (groupés logiquement)
+**Total aujourd'hui** : 46 features (#43-88), 31 commits
+
+---
+
 ## Session 76-83 - 2025-12-30 - Features #76-83: Comparison system
 
 ### Ce qui a été fait
