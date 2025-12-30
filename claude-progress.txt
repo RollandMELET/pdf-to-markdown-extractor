@@ -1,0 +1,86 @@
+# PDF-to-Markdown Extractor - Progress Log
+
+## Session 1 - 2025-12-30 - Initialisation du projet
+
+### Ce qui a été fait
+- Création de la structure du projet dans `/Users/rollandmelet/Développement/Projets/pdf-to-markdown-extractor/`
+- Rédaction de CLAUDE.md (instructions Claude Code avec protocole Agent Harness)
+- Rédaction de SPEC.md (spécifications complètes fonctionnelles et techniques)
+- Création de feature_list.json (140 features organisées en 7 phases)
+- Mise à jour SPEC.md v1.1.0 avec :
+  - Paramètre `extraction_strategy` (fallback/parallel_local/parallel_all/hybrid)
+  - Endpoint `/api/v1/test-extractor` pour tester un extracteur isolément
+  - Endpoint `/api/v1/extractors` pour lister les extracteurs disponibles
+  - Section 5 "Configuration" avec YAML complet
+  - Section 11 "Ajout d'un nouvel extracteur" (guide complet)
+  - Support résultat inline avec `inline=true`
+  - Interface arbitrage mise à jour pour 3 extracteurs
+- Ajout de 12 nouvelles features (141-152) dans feature_list.json
+
+### État actuel
+- **Features complétées** : 0/152
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15 + 146-147)
+- **Prochaine feature** : #1 - Project structure initialization
+
+### Blocages / Questions
+- Aucun blocage identifié
+- Projet prêt pour le démarrage du développement
+
+### Notes pour la prochaine session
+1. Exécuter le protocole de démarrage (voir CLAUDE.md)
+2. Commencer par Feature #1 : créer la structure des répertoires
+3. Ne pas oublier d'initialiser Git (Feature #15) tôt dans le processus
+4. Les nouvelles features de configuration (#146, #147) sont en Phase 1
+
+---
+
+## Résumé des ajouts v1.1.0
+
+### Nouvelles features ajoutées
+
+| ID | Nom | Phase |
+|----|-----|-------|
+| 141 | Extraction strategy parameter | Phase 4 |
+| 142 | Hybrid strategy implementation | Phase 4 |
+| 143 | GET /api/v1/extractors endpoint | Phase 6 |
+| 144 | POST /api/v1/test-extractor endpoint | Phase 6 |
+| 145 | Inline result option | Phase 6 |
+| 146 | Configuration YAML file | Phase 1 |
+| 147 | Config loader with 3-level priority | Phase 1 |
+| 148 | ExtractorRegistry class | Phase 4 |
+| 149 | Extractor capabilities method | Phase 2 |
+| 150 | Test test-extractor endpoint | Phase 6 |
+| 151 | EXTRACTOR_GUIDE.md documentation | Phase 7 |
+| 152 | Arbitration UI for 3 extractors | Phase 5 |
+
+### Stratégies d'extraction disponibles
+
+| Stratégie | Comportement | Coût |
+|-----------|-------------|------|
+| `fallback` | Docling → MinerU → Mistral (si échec) | Minimal |
+| `parallel_local` | Docling + MinerU en parallèle | Gratuit |
+| `parallel_all` | Docling + MinerU + Mistral en parallèle | ~$0.002/page |
+| `hybrid` | Local d'abord, Mistral si divergences | Variable |
+
+---
+
+## Template pour sessions suivantes
+
+```
+## Session N - YYYY-MM-DD - Description
+
+### Ce qui a été fait
+- Feature #X : description
+- Feature #Y : description
+
+### État actuel
+- **Features complétées** : X/152
+- **Phase actuelle** : Phase N - Nom
+- **Prochaine feature** : #Z - Nom
+
+### Blocages / Questions
+- Description du blocage si applicable
+
+### Notes pour la prochaine session
+- Points importants à retenir
+```

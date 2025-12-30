@@ -1,0 +1,1378 @@
+{
+  "project": "pdf-to-markdown-extractor",
+  "version": "1.0.0",
+  "created_at": "2025-12-30",
+  "last_updated": "2025-12-30",
+  "total_features": 152,
+  "completed": 0,
+  "features": [
+    {
+      "id": 1,
+      "name": "Project structure initialization",
+      "description": "Create base directory structure with src/, tests/, docs/, scripts/ folders",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "All directories exist and contain __init__.py where needed"
+    },
+    {
+      "id": 2,
+      "name": "Requirements.txt with pinned versions",
+      "description": "Create requirements.txt with all dependencies: fastapi, celery, redis, docling, pymupdf, streamlit, pytest",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pip install -r requirements.txt succeeds without errors"
+    },
+    {
+      "id": 3,
+      "name": "Dockerfile for API service",
+      "description": "Create Dockerfile with Python 3.11, system deps (poppler, tesseract), and app setup",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "docker build -t pdf-extractor . succeeds"
+    },
+    {
+      "id": 4,
+      "name": "docker-compose.yml base setup",
+      "description": "Create docker-compose with api, worker, redis services. Include volumes for data persistence",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "docker-compose up -d starts all services"
+    },
+    {
+      "id": 5,
+      "name": ".env.example file",
+      "description": "Create .env.example with all required environment variables documented",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "File contains REDIS_URL, MISTRAL_API_KEY, MAX_FILE_SIZE_MB, etc."
+    },
+    {
+      "id": 6,
+      "name": "FastAPI app skeleton",
+      "description": "Create src/api/main.py with FastAPI app, CORS, basic health endpoint",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "GET /health returns {status: 'ok'}"
+    },
+    {
+      "id": 7,
+      "name": "Celery app configuration",
+      "description": "Create src/core/celery_app.py with Celery instance configured for Redis",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "celery -A src.core.celery_app worker --loglevel=info starts"
+    },
+    {
+      "id": 8,
+      "name": "Redis connection helper",
+      "description": "Create src/utils/redis_client.py with connection pooling and health check",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "redis_client.ping() returns True when Redis is running"
+    },
+    {
+      "id": 9,
+      "name": "Logging configuration",
+      "description": "Create src/utils/logging_config.py with structured JSON logging, log levels from env",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Logs appear in JSON format with timestamp, level, message"
+    },
+    {
+      "id": 10,
+      "name": "Config management with Pydantic Settings",
+      "description": "Create src/core/config.py using pydantic-settings for typed configuration",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "from src.core.config import settings works, settings.redis_url is set"
+    },
+    {
+      "id": 11,
+      "name": "pytest configuration",
+      "description": "Create pytest.ini and conftest.py with fixtures for test client, temp files",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 2,
+      "verification": "pytest runs and discovers tests"
+    },
+    {
+      "id": 12,
+      "name": "Test fixtures directory structure",
+      "description": "Create tests/fixtures/ with simple/, medium/, complex/, edge_cases/ subdirs",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Directory structure exists"
+    },
+    {
+      "id": 13,
+      "name": "Sample PDF fixtures",
+      "description": "Add at least 3 sample PDFs: text_only.pdf, simple_table.pdf, multi_column.pdf",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 2,
+      "verification": "PDF files exist and are valid"
+    },
+    {
+      "id": 14,
+      "name": "init.sh script",
+      "description": "Create init.sh that checks dependencies, starts services, runs basic health check",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 2,
+      "verification": "./init.sh completes successfully and shows service status"
+    },
+    {
+      "id": 15,
+      "name": "Git repository initialization",
+      "description": "Initialize git repo, add remote origin https://github.com/RollandMELET/pdf-to-markdown-extractor, initial commit with all infrastructure files",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "git log shows initial commit, git remote -v shows origin, .gitignore excludes __pycache__, .env, etc."
+    },
+    {
+      "id": 16,
+      "name": "BaseExtractor abstract class",
+      "description": "Create src/extractors/base.py with BaseExtractor ABC defining extract(), is_available(), get_capabilities()",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Class can be imported, has all required abstract methods"
+    },
+    {
+      "id": 17,
+      "name": "ExtractionResult dataclass",
+      "description": "Create ExtractionResult in base.py with markdown, metadata, images, tables, confidence_score fields",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "ExtractionResult can be instantiated with all fields"
+    },
+    {
+      "id": 18,
+      "name": "Docling installation verification",
+      "description": "Add docling to requirements, verify import works in container",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "from docling.document_converter import DocumentConverter succeeds"
+    },
+    {
+      "id": 19,
+      "name": "DoclingExtractor basic implementation",
+      "description": "Create src/extractors/docling_extractor.py implementing BaseExtractor with basic text extraction",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "DoclingExtractor().extract('test.pdf') returns ExtractionResult with markdown"
+    },
+    {
+      "id": 20,
+      "name": "DoclingExtractor table extraction",
+      "description": "Add table structure recognition to DoclingExtractor, output as markdown tables",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Extract simple_table.pdf returns markdown with | delimited table"
+    },
+    {
+      "id": 21,
+      "name": "DoclingExtractor image extraction",
+      "description": "Add image extraction to DoclingExtractor, save to output folder, reference in markdown",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Extract PDF with image creates images/ folder with PNG files"
+    },
+    {
+      "id": 22,
+      "name": "DoclingExtractor metadata extraction",
+      "description": "Extract PDF metadata: title, author, page count, creation date",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 2,
+      "verification": "metadata dict contains pages, title (if available)"
+    },
+    {
+      "id": 23,
+      "name": "DoclingExtractor is_available check",
+      "description": "Implement is_available() that verifies docling is installed and models are loaded",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 2,
+      "verification": "is_available() returns True when docling is properly configured"
+    },
+    {
+      "id": 24,
+      "name": "DoclingExtractor error handling",
+      "description": "Add try-catch for common errors: file not found, corrupted PDF, timeout",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Extract corrupted.pdf raises ExtractionError with clear message"
+    },
+    {
+      "id": 25,
+      "name": "Simple extraction pipeline",
+      "description": "Create src/core/orchestrator.py with extract_simple() that uses DoclingExtractor",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "orchestrator.extract_simple('test.pdf') returns ExtractionResult"
+    },
+    {
+      "id": 26,
+      "name": "Output directory management",
+      "description": "Create src/utils/file_utils.py with create_output_dir(), cleanup_old_outputs()",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 2,
+      "verification": "create_output_dir() creates timestamped folder, returns path"
+    },
+    {
+      "id": 27,
+      "name": "Markdown output writer",
+      "description": "Create src/utils/markdown_utils.py with write_markdown() that adds YAML frontmatter",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Output .md file has --- delimited frontmatter with metadata"
+    },
+    {
+      "id": 28,
+      "name": "metadata.json writer",
+      "description": "Create function to write metadata.json with full extraction details",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 2,
+      "verification": "metadata.json is valid JSON with document, extraction, content sections"
+    },
+    {
+      "id": 29,
+      "name": "Test DoclingExtractor with text_only.pdf",
+      "description": "Write test that extracts text_only.pdf and verifies markdown output",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest tests/test_extractors.py::test_docling_text_only passes"
+    },
+    {
+      "id": 30,
+      "name": "Test DoclingExtractor with simple_table.pdf",
+      "description": "Write test that verifies table is properly converted to markdown",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest tests/test_extractors.py::test_docling_simple_table passes"
+    },
+    {
+      "id": 31,
+      "name": "Test DoclingExtractor error cases",
+      "description": "Write tests for corrupted PDF, empty PDF, non-existent file",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 2,
+      "verification": "All error case tests pass with appropriate exceptions"
+    },
+    {
+      "id": 32,
+      "name": "DoclingExtractor OCR support",
+      "description": "Enable OCR for scanned documents via EasyOCR or Tesseract",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Extract scanned_document.pdf returns readable text"
+    },
+    {
+      "id": 33,
+      "name": "DoclingExtractor configuration options",
+      "description": "Add configurable options: ocr_engine, table_structure, extract_images",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 2,
+      "verification": "DoclingExtractor(options={'ocr_engine': 'tesseract'}) works"
+    },
+    {
+      "id": 34,
+      "name": "DoclingExtractor timing metrics",
+      "description": "Track and return extraction_time in ExtractionResult",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 3,
+      "verification": "ExtractionResult.extraction_time is set in seconds"
+    },
+    {
+      "id": 35,
+      "name": "DoclingExtractor confidence scoring",
+      "description": "Compute basic confidence score based on text density and structure detection",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 3,
+      "verification": "confidence_score is between 0.0 and 1.0"
+    },
+    {
+      "id": 36,
+      "name": "ComplexityAnalyzer class",
+      "description": "Create src/core/complexity.py with ComplexityAnalyzer class",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 1,
+      "verification": "ComplexityAnalyzer can be instantiated"
+    },
+    {
+      "id": 37,
+      "name": "Page count scoring",
+      "description": "Implement page_count_score(): 1-5 pages=0, 6-20=5, 21-50=10",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 1,
+      "verification": "page_count_score(25) returns 10"
+    },
+    {
+      "id": 38,
+      "name": "Table detection scoring",
+      "description": "Implement table_score() using layout analysis: 0 tables=0, 1-3=10, 4+=25",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 1,
+      "verification": "table_score(5) returns 25"
+    },
+    {
+      "id": 39,
+      "name": "Multi-column detection",
+      "description": "Implement column_score() detecting 2+ column layouts",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 1,
+      "verification": "column_score() returns 20 for multi-column PDF"
+    },
+    {
+      "id": 40,
+      "name": "Image density scoring",
+      "description": "Implement image_score() based on images/page ratio",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 2,
+      "verification": "image_score() returns 15 for PDF with many diagrams"
+    },
+    {
+      "id": 41,
+      "name": "Formula detection scoring",
+      "description": "Implement formula_score() detecting LaTeX/MathML patterns",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 2,
+      "verification": "formula_score() returns 15 for PDF with equations"
+    },
+    {
+      "id": 42,
+      "name": "Scan detection scoring",
+      "description": "Implement scan_score() detecting if document is scanned (low text extractability)",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 2,
+      "verification": "scan_score() returns 15 for scanned_document.pdf"
+    },
+    {
+      "id": 43,
+      "name": "Total complexity score calculation",
+      "description": "Implement analyze() returning total score and breakdown",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 1,
+      "verification": "analyze() returns {'total': 60, 'classification': 'complex', 'breakdown': {...}}"
+    },
+    {
+      "id": 44,
+      "name": "Complexity classification",
+      "description": "Implement classify() returning simple/medium/complex based on thresholds",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 1,
+      "verification": "classify(25) returns 'simple', classify(60) returns 'complex'"
+    },
+    {
+      "id": 45,
+      "name": "Orchestrator complexity routing",
+      "description": "Update orchestrator to call ComplexityAnalyzer and route accordingly",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 1,
+      "verification": "orchestrator.extract() calls complexity analyzer before extraction"
+    },
+    {
+      "id": 46,
+      "name": "Test complexity simple document",
+      "description": "Test that text_only.pdf is classified as simple",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest test_complexity.py::test_simple_classification passes"
+    },
+    {
+      "id": 47,
+      "name": "Test complexity complex document",
+      "description": "Test that technical_report.pdf is classified as complex",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest test_complexity.py::test_complex_classification passes"
+    },
+    {
+      "id": 48,
+      "name": "Complexity cache",
+      "description": "Cache complexity results in Redis to avoid re-analysis",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 3,
+      "verification": "Second analysis of same file uses cache"
+    },
+    {
+      "id": 49,
+      "name": "Force complexity option",
+      "description": "Add force_complexity parameter to bypass auto-detection",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 2,
+      "verification": "orchestrator.extract(force_complexity='complex') skips analysis"
+    },
+    {
+      "id": 50,
+      "name": "Complexity analysis in extraction report",
+      "description": "Include complexity details in extraction_report.json",
+      "category": "Phase 3 - Évaluation complexité",
+      "status": "pending",
+      "priority": 2,
+      "verification": "extraction_report.json has complexity_analysis section"
+    },
+    {
+      "id": 51,
+      "name": "MinerU installation",
+      "description": "Add MinerU to requirements, verify import in container",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "MinerU can be imported and initialized"
+    },
+    {
+      "id": 52,
+      "name": "MinerUExtractor basic implementation",
+      "description": "Create src/extractors/mineru_extractor.py implementing BaseExtractor",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "MinerUExtractor().extract('test.pdf') returns ExtractionResult"
+    },
+    {
+      "id": 53,
+      "name": "MinerUExtractor table extraction",
+      "description": "Configure MinerU for accurate table structure recognition",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Complex tables are properly extracted with structure"
+    },
+    {
+      "id": 54,
+      "name": "MinerUExtractor formula support",
+      "description": "Enable LaTeX formula recognition in MinerU",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 2,
+      "verification": "PDF with formulas outputs LaTeX syntax"
+    },
+    {
+      "id": 55,
+      "name": "MinerUExtractor error handling",
+      "description": "Add comprehensive error handling for MinerU failures",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Graceful failure with ExtractionError"
+    },
+    {
+      "id": 56,
+      "name": "ExtractorRegistry",
+      "description": "Create registry pattern to manage available extractors",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "ExtractorRegistry.get_available() returns list of extractors"
+    },
+    {
+      "id": 57,
+      "name": "Parallel extraction executor",
+      "description": "Create executor that runs multiple extractors in parallel using ThreadPoolExecutor",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "extract_parallel(['docling', 'mineru'], pdf) returns both results"
+    },
+    {
+      "id": 58,
+      "name": "Extraction timeout handling",
+      "description": "Add configurable timeout per extractor, cancel if exceeded",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Extractor exceeding timeout raises TimeoutError"
+    },
+    {
+      "id": 59,
+      "name": "Extraction result aggregator",
+      "description": "Create aggregator that collects results from parallel extractors",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Aggregator returns dict of {extractor_name: ExtractionResult}"
+    },
+    {
+      "id": 60,
+      "name": "Memory management for parallel extraction",
+      "description": "Implement memory checks before running multiple extractors",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Low memory warning logged when appropriate"
+    },
+    {
+      "id": 61,
+      "name": "Orchestrator complex pipeline",
+      "description": "Update orchestrator to use parallel extraction for complex documents",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Complex document triggers both Docling and MinerU"
+    },
+    {
+      "id": 62,
+      "name": "Test parallel extraction",
+      "description": "Test that parallel extraction returns results from both extractors",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest test_extractors.py::test_parallel_extraction passes"
+    },
+    {
+      "id": 63,
+      "name": "Test extractor fallback",
+      "description": "Test that if one extractor fails, other results are still used",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest test_extractors.py::test_extractor_fallback passes"
+    },
+    {
+      "id": 64,
+      "name": "Celery task for extraction",
+      "description": "Create Celery task that wraps extraction for async processing",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "extraction_task.delay(pdf_path) queues job to Redis"
+    },
+    {
+      "id": 65,
+      "name": "Job status tracking",
+      "description": "Store job status in Redis: pending, extracting, comparing, completed, failed",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "get_job_status(job_id) returns current status"
+    },
+    {
+      "id": 66,
+      "name": "Progress percentage calculation",
+      "description": "Calculate and update progress percentage during extraction",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 2,
+      "verification": "get_job_progress(job_id) returns 0-100"
+    },
+    {
+      "id": 67,
+      "name": "MinerU GPU detection",
+      "description": "Detect if GPU is available and configure MinerU accordingly",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 3,
+      "verification": "MinerU uses GPU when available, falls back to CPU"
+    },
+    {
+      "id": 68,
+      "name": "Extractor configuration YAML",
+      "description": "Create config/extractors.yaml for extractor settings",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Extractors load config from YAML file"
+    },
+    {
+      "id": 69,
+      "name": "Test MinerU with complex document",
+      "description": "Test MinerU extraction with technical_report.pdf",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest test_extractors.py::test_mineru_complex passes"
+    },
+    {
+      "id": 70,
+      "name": "MinerUExtractor VLM mode",
+      "description": "Enable Vision Language Model mode for better accuracy",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 2,
+      "verification": "MinerU uses VLM pipeline when configured"
+    },
+    {
+      "id": 71,
+      "name": "Resource usage monitoring",
+      "description": "Log memory and CPU usage during extraction",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 3,
+      "verification": "Logs show resource usage per extractor"
+    },
+    {
+      "id": 72,
+      "name": "Extraction result normalization",
+      "description": "Normalize markdown output format across extractors",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Both extractors output consistent markdown structure"
+    },
+    {
+      "id": 73,
+      "name": "Table format standardization",
+      "description": "Convert all table outputs to consistent markdown table format",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Tables from both extractors have same column separators"
+    },
+    {
+      "id": 74,
+      "name": "Image path standardization",
+      "description": "Ensure image references use consistent relative paths",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 2,
+      "verification": "All image paths are relative to output directory"
+    },
+    {
+      "id": 75,
+      "name": "Extraction metrics collection",
+      "description": "Collect and store metrics: time per page, confidence, errors",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 3,
+      "verification": "Metrics available in extraction_report.json"
+    },
+    {
+      "id": 76,
+      "name": "Comparator class skeleton",
+      "description": "Create src/core/comparator.py with ExtractionComparator class",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "ExtractionComparator can be instantiated"
+    },
+    {
+      "id": 77,
+      "name": "Text similarity calculation",
+      "description": "Implement text_similarity() using difflib.SequenceMatcher",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "text_similarity('abc', 'abd') returns ~0.67"
+    },
+    {
+      "id": 78,
+      "name": "Block-level alignment",
+      "description": "Align semantic blocks (paragraphs, tables, images) across extractions",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Blocks from both extractions are matched by position/content"
+    },
+    {
+      "id": 79,
+      "name": "Table comparison",
+      "description": "Compare tables cell by cell, detect structural differences",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Table differences show which cells differ"
+    },
+    {
+      "id": 80,
+      "name": "Divergence detection",
+      "description": "Identify and classify divergences: text_mismatch, table_structure, missing_block",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "find_divergences() returns list of Divergence objects"
+    },
+    {
+      "id": 81,
+      "name": "Divergence model",
+      "description": "Create Divergence dataclass with id, type, page, block_id, content_a, content_b, similarity",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Divergence can be serialized to JSON"
+    },
+    {
+      "id": 82,
+      "name": "Similarity threshold configuration",
+      "description": "Make divergence threshold configurable (default 0.9)",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Threshold can be set via config"
+    },
+    {
+      "id": 83,
+      "name": "Auto-merge high confidence blocks",
+      "description": "Automatically merge blocks with >95% similarity without flagging",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "High similarity blocks don't appear in divergences list"
+    },
+    {
+      "id": 84,
+      "name": "Best extraction selection",
+      "description": "When extractions differ, select one based on confidence scores",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "select_best() returns extractor with higher confidence for block"
+    },
+    {
+      "id": 85,
+      "name": "Merge strategy options",
+      "description": "Implement merge strategies: prefer_docling, prefer_mineru, highest_confidence",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Merge respects configured strategy"
+    },
+    {
+      "id": 86,
+      "name": "Merged document generator",
+      "description": "Generate final markdown by merging best blocks from each extraction",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "merge() returns complete markdown document"
+    },
+    {
+      "id": 87,
+      "name": "Needs review status",
+      "description": "Set job status to needs_review when divergences exceed threshold",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Job with divergences has status needs_review"
+    },
+    {
+      "id": 88,
+      "name": "Streamlit app skeleton",
+      "description": "Create src/arbitration/streamlit_app.py with basic layout",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "streamlit run streamlit_app.py shows basic UI"
+    },
+    {
+      "id": 89,
+      "name": "Streamlit jobs list page",
+      "description": "Create page showing jobs awaiting arbitration",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "UI shows list of pending jobs"
+    },
+    {
+      "id": 90,
+      "name": "Streamlit comparison view",
+      "description": "Create side-by-side comparison view for divergences",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "UI shows two columns with different extractions"
+    },
+    {
+      "id": 91,
+      "name": "Streamlit choice buttons",
+      "description": "Add buttons to choose extraction A, B, or edit manually",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Clicking button records choice"
+    },
+    {
+      "id": 92,
+      "name": "Streamlit manual editor",
+      "description": "Add text area for manual content editing",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "User can type custom content and save"
+    },
+    {
+      "id": 93,
+      "name": "Streamlit PDF preview",
+      "description": "Show original PDF page as image for reference",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 2,
+      "verification": "UI shows PDF page image"
+    },
+    {
+      "id": 94,
+      "name": "Arbitration persistence",
+      "description": "Save user choices to Redis/database",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Choices persist across page reload"
+    },
+    {
+      "id": 95,
+      "name": "Apply arbitration choices",
+      "description": "Re-merge document using user arbitration choices",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Final document reflects user choices"
+    },
+    {
+      "id": 96,
+      "name": "Complete arbitration flow",
+      "description": "Move job from needs_review to completed after all divergences resolved",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Job status changes to completed"
+    },
+    {
+      "id": 97,
+      "name": "Test comparison with identical results",
+      "description": "Test that identical extractions produce no divergences",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest test_comparator.py::test_no_divergences passes"
+    },
+    {
+      "id": 98,
+      "name": "Test comparison with differences",
+      "description": "Test that different extractions produce correct divergence list",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest test_comparator.py::test_divergences_detected passes"
+    },
+    {
+      "id": 99,
+      "name": "Dockerfile for Streamlit",
+      "description": "Create Dockerfile.streamlit for arbitration UI",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 2,
+      "verification": "docker build -f Dockerfile.streamlit succeeds"
+    },
+    {
+      "id": 100,
+      "name": "Streamlit in docker-compose",
+      "description": "Add streamlit service to docker-compose with optional profile",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 2,
+      "verification": "docker-compose --profile with-ui up starts Streamlit"
+    },
+    {
+      "id": 101,
+      "name": "POST /api/v1/extract endpoint",
+      "description": "Implement full extract endpoint with file upload, URL, and options",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "POST with PDF file returns job_id"
+    },
+    {
+      "id": 102,
+      "name": "GET /api/v1/status/{job_id} endpoint",
+      "description": "Implement status endpoint returning job state and progress",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "GET returns current status and progress percentage"
+    },
+    {
+      "id": 103,
+      "name": "GET /api/v1/result/{job_id} endpoint",
+      "description": "Implement result endpoint returning extraction results",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "GET returns markdown, metadata, download URLs"
+    },
+    {
+      "id": 104,
+      "name": "POST /api/v1/arbitrate/{job_id} endpoint",
+      "description": "Implement arbitration endpoint for submitting choices",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "POST with choice updates divergence resolution"
+    },
+    {
+      "id": 105,
+      "name": "GET /api/v1/review/{job_id} endpoint",
+      "description": "Implement review endpoint listing divergences to arbitrate",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "GET returns list of Divergence objects"
+    },
+    {
+      "id": 106,
+      "name": "GET /api/v1/download/{job_id}/{file} endpoint",
+      "description": "Implement file download endpoint for results",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "GET returns file content with correct MIME type"
+    },
+    {
+      "id": 107,
+      "name": "Webhook callback implementation",
+      "description": "Send POST to callback_url when job completes or fails",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Callback URL receives POST with job result"
+    },
+    {
+      "id": 108,
+      "name": "Webhook retry logic",
+      "description": "Retry webhook 3 times with exponential backoff on failure",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Failed webhooks are retried"
+    },
+    {
+      "id": 109,
+      "name": "Request validation with Pydantic",
+      "description": "Create Pydantic models for all API requests/responses",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Invalid requests return 422 with validation errors"
+    },
+    {
+      "id": 110,
+      "name": "File upload size limit",
+      "description": "Enforce MAX_FILE_SIZE_MB limit on uploads",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Files exceeding limit return 413 error"
+    },
+    {
+      "id": 111,
+      "name": "MIME type validation",
+      "description": "Validate uploaded files are PDF (application/pdf)",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Non-PDF files return 415 error"
+    },
+    {
+      "id": 112,
+      "name": "Rate limiting",
+      "description": "Implement rate limiting per IP (e.g., 10 req/min)",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Exceeding rate limit returns 429 error"
+    },
+    {
+      "id": 113,
+      "name": "API key authentication (optional)",
+      "description": "Add optional API key header for authentication",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 3,
+      "verification": "Invalid API key returns 401 error"
+    },
+    {
+      "id": 114,
+      "name": "OpenAPI documentation",
+      "description": "Ensure FastAPI generates complete OpenAPI spec",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "/docs shows all endpoints with examples"
+    },
+    {
+      "id": 115,
+      "name": "API.md documentation",
+      "description": "Write comprehensive API documentation in docs/API.md",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "API.md covers all endpoints with examples"
+    },
+    {
+      "id": 116,
+      "name": "n8n workflow example",
+      "description": "Create example n8n workflow JSON using the API",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 2,
+      "verification": "n8n workflow imports and runs successfully"
+    },
+    {
+      "id": 117,
+      "name": "Test extract endpoint",
+      "description": "Write integration tests for extract endpoint",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest test_api.py::test_extract_endpoint passes"
+    },
+    {
+      "id": 118,
+      "name": "Test full extraction flow",
+      "description": "End-to-end test: upload → extract → download result",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest test_api.py::test_full_flow passes"
+    },
+    {
+      "id": 119,
+      "name": "Error response standardization",
+      "description": "Ensure all errors return consistent JSON structure",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 2,
+      "verification": "All errors have {error: string, detail: string, status_code: int}"
+    },
+    {
+      "id": 120,
+      "name": "CORS configuration",
+      "description": "Configure CORS for allowed origins",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Cross-origin requests from allowed origins succeed"
+    },
+    {
+      "id": 121,
+      "name": "MistralExtractor implementation",
+      "description": "Create src/extractors/mistral_extractor.py using Mistral OCR API",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "MistralExtractor().extract() calls API and returns results"
+    },
+    {
+      "id": 122,
+      "name": "MistralExtractor API key management",
+      "description": "Load API key from environment, validate before use",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Missing API key raises configuration error"
+    },
+    {
+      "id": 123,
+      "name": "MistralExtractor as fallback",
+      "description": "Configure Mistral as fallback when local extractors fail",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Failed Docling/MinerU extraction triggers Mistral"
+    },
+    {
+      "id": 124,
+      "name": "Health endpoint with extractor status",
+      "description": "Update /health to show status of each extractor",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "/health shows docling: up, mineru: up, mistral: available"
+    },
+    {
+      "id": 125,
+      "name": "Structured logging",
+      "description": "Ensure all logs are JSON with correlation IDs",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Logs can be parsed and filtered by job_id"
+    },
+    {
+      "id": 126,
+      "name": "Prometheus metrics",
+      "description": "Add /metrics endpoint with extraction counts, durations",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 3,
+      "verification": "/metrics returns Prometheus format"
+    },
+    {
+      "id": 127,
+      "name": "Job cleanup scheduler",
+      "description": "Add scheduled task to clean up old jobs (>7 days)",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Old outputs are deleted automatically"
+    },
+    {
+      "id": 128,
+      "name": "DEPLOYMENT.md documentation",
+      "description": "Write deployment guide for Docker, Coolify, VPS",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "DEPLOYMENT.md covers all deployment scenarios"
+    },
+    {
+      "id": 129,
+      "name": "README.md with quick start",
+      "description": "Write README with installation, quick start, examples",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "README enables someone to run the project from scratch"
+    },
+    {
+      "id": 130,
+      "name": "Environment-specific configs",
+      "description": "Create docker-compose.dev.yml and docker-compose.prod.yml",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Dev and prod configs have appropriate settings"
+    },
+    {
+      "id": 131,
+      "name": "End-to-end test with simple PDF",
+      "description": "Full E2E test: API upload → extraction → download",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "E2E test passes in Docker environment"
+    },
+    {
+      "id": 132,
+      "name": "End-to-end test with complex PDF",
+      "description": "E2E test with technical report including arbitration",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Complex PDF processed with arbitration flow"
+    },
+    {
+      "id": 133,
+      "name": "Performance test with 50-page PDF",
+      "description": "Test extraction of large document, verify completion",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 2,
+      "verification": "50-page PDF extracted in < 5 minutes"
+    },
+    {
+      "id": 134,
+      "name": "Memory leak check",
+      "description": "Run multiple extractions, verify memory doesn't grow unbounded",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Memory stable after 10+ extractions"
+    },
+    {
+      "id": 135,
+      "name": "Security review",
+      "description": "Review file handling, input validation, injection risks",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "No obvious security vulnerabilities"
+    },
+    {
+      "id": 136,
+      "name": "Mac M4 local testing",
+      "description": "Verify full stack works on Mac M4 with Docker",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "docker-compose up works on Mac M4"
+    },
+    {
+      "id": 137,
+      "name": "VPS deployment test",
+      "description": "Deploy to VPS via Coolify, verify functionality",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "API accessible from internet, extraction works"
+    },
+    {
+      "id": 138,
+      "name": "Version tagging",
+      "description": "Tag release v1.0.0 in git",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "git tag v1.0.0 exists"
+    },
+    {
+      "id": 139,
+      "name": "CHANGELOG.md",
+      "description": "Write changelog documenting all features",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 2,
+      "verification": "CHANGELOG lists all major features"
+    },
+    {
+      "id": 140,
+      "name": "Final code review",
+      "description": "Review all code for consistency, documentation, tests",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "Code meets project standards"
+    },
+    {
+      "id": 141,
+      "name": "Extraction strategy parameter",
+      "description": "Implement extraction_strategy config: fallback, parallel_local, parallel_all, hybrid",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "orchestrator respects extraction_strategy from config and API options"
+    },
+    {
+      "id": 142,
+      "name": "Hybrid strategy implementation",
+      "description": "Implement hybrid strategy: local first, then Mistral if divergences detected",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Hybrid mode triggers Mistral only when local extractors diverge"
+    },
+    {
+      "id": 143,
+      "name": "GET /api/v1/extractors endpoint",
+      "description": "List available extractors with their status, version, and capabilities",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "GET /api/v1/extractors returns list of extractors with capabilities"
+    },
+    {
+      "id": 144,
+      "name": "POST /api/v1/test-extractor endpoint",
+      "description": "Test a single extractor in isolation with custom options and timing",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "POST /api/v1/test-extractor returns extraction result with timing breakdown"
+    },
+    {
+      "id": 145,
+      "name": "Inline result option",
+      "description": "Add inline=true query param to /result endpoint for small documents",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 2,
+      "verification": "GET /api/v1/result/xxx?inline=true returns markdown and images in response"
+    },
+    {
+      "id": 146,
+      "name": "Configuration YAML file",
+      "description": "Create config/settings.yaml with full configuration schema",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "config/settings.yaml exists and is loaded at startup"
+    },
+    {
+      "id": 147,
+      "name": "Config loader with 3-level priority",
+      "description": "Implement config loading: env vars < YAML < API params",
+      "category": "Phase 1 - Infrastructure",
+      "status": "pending",
+      "priority": 1,
+      "verification": "API params override YAML which overrides env vars"
+    },
+    {
+      "id": 148,
+      "name": "ExtractorRegistry class",
+      "description": "Create registry pattern for dynamic extractor loading and discovery",
+      "category": "Phase 4 - Multi-extraction",
+      "status": "pending",
+      "priority": 1,
+      "verification": "ExtractorRegistry.get_available() returns all enabled extractors"
+    },
+    {
+      "id": 149,
+      "name": "Extractor capabilities method",
+      "description": "Implement get_capabilities() for all extractors returning structured dict",
+      "category": "Phase 2 - Extraction simple",
+      "status": "pending",
+      "priority": 2,
+      "verification": "Each extractor returns capabilities: ocr, tables, formulas, languages"
+    },
+    {
+      "id": 150,
+      "name": "Test test-extractor endpoint",
+      "description": "Write integration tests for /api/v1/test-extractor",
+      "category": "Phase 6 - API Production",
+      "status": "pending",
+      "priority": 1,
+      "verification": "pytest test_api.py::test_test_extractor passes"
+    },
+    {
+      "id": 151,
+      "name": "EXTRACTOR_GUIDE.md documentation",
+      "description": "Write guide for adding new extractors in docs/EXTRACTOR_GUIDE.md",
+      "category": "Phase 7 - Finalisation",
+      "status": "pending",
+      "priority": 1,
+      "verification": "EXTRACTOR_GUIDE.md covers full process with code examples"
+    },
+    {
+      "id": 152,
+      "name": "Arbitration UI for 3 extractors",
+      "description": "Update Streamlit UI to show comparison of 3 extractors side by side",
+      "category": "Phase 5 - Comparaison & Arbitrage",
+      "status": "pending",
+      "priority": 2,
+      "verification": "UI shows 3 columns when parallel_all strategy is used"
+    }
+  ]
+}
