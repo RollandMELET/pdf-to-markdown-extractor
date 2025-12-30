@@ -4,6 +4,7 @@ PDF-to-Markdown Extractor - Parallel Extraction Executor (Feature #57).
 Executes multiple extractors in parallel using ThreadPoolExecutor.
 """
 
+import psutil
 import time
 from concurrent.futures import ThreadPoolExecutor, TimeoutError, as_completed
 from pathlib import Path
@@ -31,7 +32,12 @@ class ParallelExecutor:
         dict_keys(['docling', 'mineru'])
     """
 
-    def __init__(self, max_workers: int = 3, timeout: Optional[int] = None):
+    def __init__(
+        self,
+        max_workers: int = 3,
+        timeout: Optional[int] = None,
+        memory_threshold_gb: float = 2.0,
+    ):
         """
         Initialize parallel executor.
 
@@ -39,9 +45,12 @@ class ParallelExecutor:
             max_workers: Maximum number of parallel extractors (default: 3).
             timeout: Global timeout for all extractions in seconds (Feature #58).
                     None means no timeout.
+            memory_threshold_gb: Minimum available memory in GB (Feature #60).
+                                Default: 2.0 GB.
         """
         self.max_workers = max_workers
         self.timeout = timeout
+        self.memory_threshold_gb = memory_threshold_gb
 
     def execute(
         self,
@@ -73,6 +82,13 @@ class ParallelExecutor:
         if not extractors:
             logger.warning("No extractors provided for parallel execution")
             return {}
+
+        # Feature #60: Memory management check
+        if not self._check_memory():
+            logger.warning(
+                f"Low memory warning: Available memory below threshold "
+                f"({self.memory_threshold_gb} GB). Parallel extraction may fail."
+            )
 
         logger.info(
             f"Starting parallel extraction: {file_path.name} "
@@ -162,3 +178,39 @@ class ParallelExecutor:
                 exc_info=True
             )
             raise
+
+    def _check_memory(self) -> bool:
+        """
+        Check available memory before parallel extraction (Feature #60).
+
+        Returns:
+            bool: True if sufficient memory available, False otherwise.
+
+        Example:
+            >>> executor = ParallelExecutor(memory_threshold_gb=2.0)
+            >>> if executor._check_memory():
+            ...     print("Sufficient memory")
+        """
+        try:
+            # Get available memory
+            memory = psutil.virtual_memory()
+            available_gb = memory.available / (1024 ** 3)
+
+            logger.debug(
+                f"Memory check: {available_gb:.2f} GB available "
+                f"(threshold: {self.memory_threshold_gb} GB)"
+            )
+
+            if available_gb < self.memory_threshold_gb:
+                logger.warning(
+                    f"Low memory: {available_gb:.2f} GB available "
+                    f"(threshold: {self.memory_threshold_gb} GB)"
+                )
+                return False
+
+            return True
+
+        except Exception as e:
+            logger.warning(f"Memory check failed: {e}")
+            # Assume memory is sufficient if check fails
+            return True
