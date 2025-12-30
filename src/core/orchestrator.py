@@ -10,8 +10,10 @@ from typing import Any, Dict, List, Optional
 
 from loguru import logger
 
+from src.core.aggregator import ExtractionAggregator
 from src.core.complexity import ComplexityAnalyzer, ComplexityScore
 from src.core.config import settings
+from src.core.parallel_executor import ParallelExecutor
 from src.core.registry import ExtractorRegistry
 from src.extractors.base import BaseExtractor, ExtractionResult
 
@@ -36,6 +38,8 @@ class Orchestrator:
         """Initialize orchestrator with ExtractorRegistry (Feature #56)."""
         self.registry = ExtractorRegistry()
         self.complexity_analyzer = ComplexityAnalyzer()
+        self.parallel_executor = ParallelExecutor()  # Feature #61
+        self.aggregator = ExtractionAggregator()  # Feature #61
         logger.info(f"Orchestrator initialized with {self.registry.count()} extractors")
 
     def extract(
@@ -99,27 +103,64 @@ class Orchestrator:
                 f"(score: {complexity_score.total_score})"
             )
 
-        # Route based on complexity and strategy
+        # Route based on complexity and strategy (Feature #61)
         logger.info(f"Using extraction strategy: {strategy}")
 
-        # For now, use simple extraction (multi-extractor strategies in later features)
-        # TODO: Implement parallel_local, parallel_all, hybrid strategies
+        # Feature #61: Use parallel extraction for complex documents
         if strategy == "fallback":
-            # Use single extractor (Docling for now)
+            # Use single extractor (Docling)
             result = self.extract_simple(file_path, extractor_name="docling", options=options)
+
+            return {
+                "result": result,
+                "complexity": complexity_score.to_dict(),
+                "strategy_used": strategy,
+            }
+
+        elif strategy == "parallel_local":
+            # Parallel extraction with local extractors only (Docling + MinerU)
+            extractors_to_use = []
+
+            if self.registry.has_extractor("docling"):
+                extractors_to_use.append(self.registry.get("docling"))
+            if self.registry.has_extractor("mineru"):
+                extractors_to_use.append(self.registry.get("mineru"))
+
+            if len(extractors_to_use) < 2:
+                logger.warning("Not enough local extractors available, using fallback")
+                result = self.extract_simple(file_path, extractor_name="docling", options=options)
+                return {
+                    "result": result,
+                    "complexity": complexity_score.to_dict(),
+                    "strategy_used": "fallback",
+                }
+
+            # Run parallel extraction
+            results = self.parallel_executor.execute(extractors_to_use, file_path, options)
+
+            # Aggregate results
+            aggregation = self.aggregator.aggregate(results)
+
+            return {
+                "result": aggregation["best_result"],
+                "all_results": results,
+                "aggregation": aggregation,
+                "complexity": complexity_score.to_dict(),
+                "strategy_used": strategy,
+            }
+
         else:
-            # Default to simple extraction until multi-extractor features are implemented
+            # parallel_all, hybrid not yet implemented
             logger.warning(
                 f"Strategy '{strategy}' not yet implemented, using fallback strategy"
             )
             result = self.extract_simple(file_path, extractor_name="docling", options=options)
 
-        # Return with complexity analysis (Feature #50)
-        return {
-            "result": result,
-            "complexity": complexity_score.to_dict(),
-            "strategy_used": strategy,
-        }
+            return {
+                "result": result,
+                "complexity": complexity_score.to_dict(),
+                "strategy_used": "fallback",
+            }
 
     def _create_forced_complexity(self, level: str) -> ComplexityScore:
         """
