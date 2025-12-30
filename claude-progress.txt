@@ -1,5 +1,78 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 8 - 2025-12-30 - Feature #8: Redis connection helper
+
+### Ce qui a été fait
+- Feature #8 complétée : création du client Redis avec connection pooling
+  - Créé `src/utils/redis_client.py` avec classe `RedisClient`
+  - Pattern singleton pour gestion centralisée des connexions
+  - Connection pooling : max_connections=20, timeout=5s, keepalive
+  - Health check : méthode `ping()` pour monitoring
+  - Opérations CRUD : set(), get(), delete(), exists(), expire()
+  - Gestion gracieuse : disconnect(), reconnect()
+  - Support context manager (with statement)
+  - Fonction utilitaire : `get_redis_client()`
+  - Auto-decode responses (bytes → strings)
+  - Retry on timeout activé
+  - Validation : tous les tests passent ✓
+- Fix : retiré socket_keepalive_options incompatibles (problème Docker/macOS)
+- Mis à jour `feature_list.json` : Feature #8 → "passing", completed: 8/152
+
+### État actuel
+- **Features complétées** : 8/152 (5.26%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #9 - Logging configuration with loguru
+
+### RedisClient caractéristiques
+**Singleton Pattern** :
+- Instance unique partagée dans toute l'application
+- `RedisClient.get_instance()` ou `get_redis_client()`
+
+**Connection Pool** :
+- Max connections : 20
+- Socket timeout : 5 secondes
+- Connection timeout : 5 secondes
+- Keepalive : activé
+- Retry on timeout : activé
+- Decode responses : true (auto UTF-8)
+
+**Opérations disponibles** :
+- Health check : `ping()` → bool
+- Set/Get : `set(key, value, ex=None)`, `get(key)`
+- Delete : `delete(*keys)` → int
+- Exists : `exists(*keys)` → int
+- Expire : `expire(key, seconds)` → bool
+- Raw client : `get_client()` → redis.Redis
+
+**Reliability** :
+- Graceful disconnect/reconnect
+- Logging avec loguru
+- Exception handling sur toutes les opérations
+- Context manager support
+
+### Tests réussis
+```
+✓ Singleton instance working
+✓ Redis is reachable and healthy (ping)
+✓ SET test:key:123 = test_value_123
+✓ GET test:key:123 = test_value_123
+✓ Key exists check
+✓ Deleted 1 key(s)
+✓ Key no longer exists after deletion
+✓ Expiration set to 10 seconds
+✓ get_redis_client() convenience function
+```
+
+### Blocages / Questions
+- Aucun blocage
+
+### Notes pour la prochaine session
+1. Feature #9 : Logging configuration with loguru (src/core/logger.py)
+2. Configuration structurée des logs (level, format, rotation)
+3. Intégration avec FastAPI et Celery
+
+---
+
 ## Session 7 - 2025-12-30 - Feature #7: Celery app configuration
 
 ### Ce qui a été fait
