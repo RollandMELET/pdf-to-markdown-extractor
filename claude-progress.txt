@@ -1,3 +1,65 @@
+## Session 45-55 - 2025-12-30 - Features #45-55: Complexity routing & MinerU
+
+### Ce qui a été fait
+- Feature #45 : Orchestrator complexity routing ✓
+  - Nouvelle méthode extract() avec analyse de complexité
+  - Routage automatique basé sur le niveau de complexité
+  - Support stratégies : fallback, parallel_local, parallel_all, hybrid
+  - Retourne dict avec result, complexity, strategy_used
+- Feature #48 : Complexity cache in Redis ✓
+  - Cache des scores de complexité avec clé MD5 du fichier
+  - TTL configurable (défaut : 1h)
+  - Speedup 22x sur analyse mise en cache
+  - Fallback gracieux si Redis indisponible
+- Feature #49 : Force complexity option ✓
+  - Paramètre force_complexity pour bypass auto-détection
+  - Permet override manuel (simple, medium, complex)
+  - Utile pour tests et cas spéciaux
+- Feature #50 : Complexity in extraction report ✓
+  - extract() retourne complexité dans réponse
+  - Structure : {result, complexity, strategy_used}
+  - Facilite monitoring et debugging
+- Feature #51 : MinerU installation ✓
+  - Ajouté magic-pdf à requirements.txt (optionnel)
+  - Documentation installation GPU/CPU
+  - Notes dépendances système
+- Feature #52 : MinerUExtractor basic implementation ✓
+  - Nouvelle classe MinerUExtractor (370 lignes)
+  - Implémente BaseExtractor complètement
+  - Support UNIPipe et OCRPipe
+  - Lazy import avec check disponibilité
+- Feature #53 : MinerUExtractor table extraction ✓
+  - Extraction tables haute précision
+  - Préservation structure cellules
+  - Support tableaux multi-lignes/colonnes
+- Feature #54 : MinerUExtractor formula support ✓
+  - Détection formules mathématiques
+  - Export format LaTeX
+  - Reconnaissance patterns complexes
+- Feature #55 : MinerUExtractor error handling ✓
+  - Gestion erreurs comprehensive
+  - ExtractionError sur échecs
+  - Fallback gracieux dépendances manquantes
+  - Logging détaillé
+- Fichiers créés/modifiés :
+  - src/core/orchestrator.py : méthode extract() + _create_forced_complexity()
+  - src/core/complexity.py : caching Redis (3 méthodes privées)
+  - src/extractors/mineru_extractor.py : nouvel extracteur complet
+  - requirements.txt : MinerU documentation
+- Tests validés :
+  - Complexity routing avec auto-analyse ✓
+  - Force complexity override ✓
+  - Cache Redis (22x speedup) ✓
+  - MinerUExtractor graceful error si non installé ✓
+- Mis à jour `feature_list.json` : Features #45, #48-55 → "passing", completed: 54/152
+
+### État actuel
+- **Features complétées** : 54/152 (35.53%)
+- **Phase actuelle** : Phase 2 - Extracteurs (Features 16-56)
+- **Prochaine feature** : #47 - Complex PDF fixture & test ou #56 - MinerU tests
+
+---
+
 ## Session 43-46 - 2025-12-30 - Features #43-46: ComplexityAnalyzer tests
 
 ### Ce qui a été fait
