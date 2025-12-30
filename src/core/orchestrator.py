@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional
 
 from loguru import logger
 
+from src.core.complexity import ComplexityAnalyzer, ComplexityScore
 from src.core.config import settings
 from src.extractors.base import BaseExtractor, ExtractionResult
 from src.extractors.docling_extractor import DoclingExtractor
@@ -34,6 +35,7 @@ class Orchestrator:
     def __init__(self):
         """Initialize orchestrator with available extractors."""
         self.extractors: Dict[str, BaseExtractor] = {}
+        self.complexity_analyzer = ComplexityAnalyzer()
         self._register_extractors()
 
     def _register_extractors(self) -> None:
@@ -56,6 +58,120 @@ class Orchestrator:
         # Mistral (Feature #50+)
 
         logger.info(f"Total extractors registered: {len(self.extractors)}")
+
+    def extract(
+        self,
+        file_path: Path,
+        strategy: Optional[str] = None,
+        force_complexity: Optional[str] = None,
+        options: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Extract PDF with complexity-based routing (Feature #45).
+
+        This is the main extraction method that analyzes document complexity
+        and routes to appropriate extractors based on the strategy.
+
+        Args:
+            file_path: Path to PDF file.
+            strategy: Extraction strategy (fallback, parallel_local, parallel_all, hybrid).
+                     Defaults to settings.default_extraction_strategy.
+            force_complexity: Force complexity level (simple, medium, complex).
+                            Bypasses auto-detection (Feature #49).
+            options: Extraction options to pass to extractors.
+
+        Returns:
+            dict: Extraction result with complexity analysis.
+                {
+                    "result": ExtractionResult,
+                    "complexity": ComplexityScore.to_dict(),
+                    "strategy_used": str,
+                }
+
+        Raises:
+            FileNotFoundError: If file doesn't exist.
+
+        Example:
+            >>> orchestrator = Orchestrator()
+            >>> result = orchestrator.extract(Path("doc.pdf"))
+            >>> print(result["complexity"]["complexity_level"])
+            medium
+            >>> print(result["result"].markdown)
+        """
+        # Validate file exists
+        if not file_path.exists():
+            raise FileNotFoundError(f"PDF file not found: {file_path}")
+
+        # Determine strategy
+        strategy = strategy or settings.default_extraction_strategy
+
+        # Analyze complexity (Feature #45)
+        if force_complexity:
+            # Feature #49: Force complexity option
+            logger.info(f"Forcing complexity level: {force_complexity}")
+            # Create a fake complexity score with forced level
+            complexity_score = self._create_forced_complexity(force_complexity)
+        else:
+            # Normal complexity analysis
+            logger.info(f"Analyzing document complexity: {file_path.name}")
+            complexity_score = self.complexity_analyzer.analyze(file_path)
+            logger.info(
+                f"Complexity: {complexity_score.complexity_level} "
+                f"(score: {complexity_score.total_score})"
+            )
+
+        # Route based on complexity and strategy
+        logger.info(f"Using extraction strategy: {strategy}")
+
+        # For now, use simple extraction (multi-extractor strategies in later features)
+        # TODO: Implement parallel_local, parallel_all, hybrid strategies
+        if strategy == "fallback":
+            # Use single extractor (Docling for now)
+            result = self.extract_simple(file_path, extractor_name="docling", options=options)
+        else:
+            # Default to simple extraction until multi-extractor features are implemented
+            logger.warning(
+                f"Strategy '{strategy}' not yet implemented, using fallback strategy"
+            )
+            result = self.extract_simple(file_path, extractor_name="docling", options=options)
+
+        # Return with complexity analysis (Feature #50)
+        return {
+            "result": result,
+            "complexity": complexity_score.to_dict(),
+            "strategy_used": strategy,
+        }
+
+    def _create_forced_complexity(self, level: str) -> ComplexityScore:
+        """
+        Create a ComplexityScore with forced complexity level.
+
+        This is used when force_complexity parameter is provided.
+
+        Args:
+            level: Forced complexity level (simple, medium, complex).
+
+        Returns:
+            ComplexityScore: Score with forced level.
+        """
+        # Map levels to scores that produce the desired classification
+        score_map = {
+            "simple": 0,    # <= 10 = simple
+            "medium": 20,   # 11-35 = medium
+            "complex": 50,  # > 35 = complex
+        }
+
+        total_score = score_map.get(level, 0)
+
+        # Return ComplexityScore with all zeros except one component
+        return ComplexityScore(
+            page_count_score=total_score,
+            table_score=0,
+            column_score=0,
+            image_score=0,
+            formula_score=0,
+            scan_score=0,
+        )
 
     def extract_simple(
         self,

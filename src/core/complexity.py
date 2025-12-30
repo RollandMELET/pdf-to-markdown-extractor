@@ -4,12 +4,16 @@ PDF-to-Markdown Extractor - Complexity Analyzer.
 Analyzes PDF complexity to determine optimal extraction strategy.
 """
 
+import hashlib
+import json
 import re
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 import fitz  # PyMuPDF
 from loguru import logger
+
+from src.utils.redis_client import get_redis_client
 
 
 class ComplexityScore:
@@ -101,13 +105,27 @@ class ComplexityAnalyzer:
         25
     """
 
-    def __init__(self):
-        """Initialize complexity analyzer."""
-        pass
+    def __init__(self, use_cache: bool = True, cache_ttl: int = 3600):
+        """
+        Initialize complexity analyzer.
+
+        Args:
+            use_cache: Whether to use Redis cache for results (Feature #48).
+            cache_ttl: Cache TTL in seconds (default: 1 hour).
+        """
+        self.use_cache = use_cache
+        self.cache_ttl = cache_ttl
+
+        if use_cache:
+            try:
+                self.redis_client = get_redis_client()
+            except Exception as e:
+                logger.warning(f"Redis unavailable, disabling cache: {e}")
+                self.use_cache = False
 
     def analyze(self, file_path: Path) -> ComplexityScore:
         """
-        Analyze PDF complexity.
+        Analyze PDF complexity with Redis caching (Feature #48).
 
         Args:
             file_path: Path to PDF file.
@@ -122,6 +140,16 @@ class ComplexityAnalyzer:
             ...     # Use parallel extraction
         """
         logger.info(f"Analyzing complexity: {file_path.name}")
+
+        # Check cache (Feature #48)
+        if self.use_cache:
+            cached_score = self._get_cached_score(file_path)
+            if cached_score:
+                logger.info(
+                    f"Complexity from cache: {file_path.name} - "
+                    f"level={cached_score.complexity_level}, total={cached_score.total_score}"
+                )
+                return cached_score
 
         # Open PDF
         doc = fitz.open(file_path)
@@ -149,6 +177,10 @@ class ComplexityAnalyzer:
                 f"Complexity analysis: {file_path.name} - "
                 f"level={score.complexity_level}, total={score.total_score}"
             )
+
+            # Store in cache (Feature #48)
+            if self.use_cache:
+                self._cache_score(file_path, score)
 
             return score
 
@@ -409,3 +441,72 @@ class ComplexityAnalyzer:
             return 20  # Partially scanned
         else:
             return 40  # Fully scanned (OCR needed)
+
+    def _get_cache_key(self, file_path: Path) -> str:
+        """
+        Generate cache key for PDF file (Feature #48).
+
+        Uses file hash to ensure cache invalidation when file changes.
+
+        Args:
+            file_path: Path to PDF file.
+
+        Returns:
+            str: Redis cache key.
+        """
+        # Calculate file hash for cache key
+        file_hash = hashlib.md5(file_path.read_bytes()).hexdigest()
+        return f"complexity:{file_hash}"
+
+    def _get_cached_score(self, file_path: Path) -> Optional[ComplexityScore]:
+        """
+        Get complexity score from Redis cache (Feature #48).
+
+        Args:
+            file_path: Path to PDF file.
+
+        Returns:
+            ComplexityScore: Cached score or None if not found.
+        """
+        try:
+            cache_key = self._get_cache_key(file_path)
+            cached_data = self.redis_client.get(cache_key)
+
+            if cached_data:
+                # Deserialize from JSON
+                data = json.loads(cached_data)
+                return ComplexityScore(
+                    page_count_score=data["page_count"],
+                    table_score=data["tables"],
+                    column_score=data["columns"],
+                    image_score=data["images"],
+                    formula_score=data["formulas"],
+                    scan_score=data["scans"],
+                )
+
+        except Exception as e:
+            logger.warning(f"Failed to get cached complexity score: {e}")
+
+        return None
+
+    def _cache_score(self, file_path: Path, score: ComplexityScore) -> None:
+        """
+        Store complexity score in Redis cache (Feature #48).
+
+        Args:
+            file_path: Path to PDF file.
+            score: ComplexityScore to cache.
+        """
+        try:
+            cache_key = self._get_cache_key(file_path)
+
+            # Serialize to JSON
+            data = json.dumps(score.components)
+
+            # Store with TTL
+            self.redis_client.set(cache_key, data, ex=self.cache_ttl)
+
+            logger.debug(f"Cached complexity score: {cache_key} (TTL: {self.cache_ttl}s)")
+
+        except Exception as e:
+            logger.warning(f"Failed to cache complexity score: {e}")

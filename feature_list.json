@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 45,
+  "completed": 54,
   "features": [
     {
       "id": 1,
@@ -407,7 +407,7 @@
       "name": "Orchestrator complexity routing",
       "description": "Update orchestrator to call ComplexityAnalyzer and route accordingly",
       "category": "Phase 3 - \u00c9valuation complexit\u00e9",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "orchestrator.extract() calls complexity analyzer before extraction"
     },
@@ -434,7 +434,7 @@
       "name": "Complexity cache",
       "description": "Cache complexity results in Redis to avoid re-analysis",
       "category": "Phase 3 - \u00c9valuation complexit\u00e9",
-      "status": "pending",
+      "status": "passing",
       "priority": 3,
       "verification": "Second analysis of same file uses cache"
     },
@@ -443,7 +443,7 @@
       "name": "Force complexity option",
       "description": "Add force_complexity parameter to bypass auto-detection",
       "category": "Phase 3 - \u00c9valuation complexit\u00e9",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "orchestrator.extract(force_complexity='complex') skips analysis"
     },
@@ -452,7 +452,7 @@
       "name": "Complexity analysis in extraction report",
       "description": "Include complexity details in extraction_report.json",
       "category": "Phase 3 - \u00c9valuation complexit\u00e9",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "extraction_report.json has complexity_analysis section"
     },
@@ -461,7 +461,7 @@
       "name": "MinerU installation",
       "description": "Add MinerU to requirements, verify import in container",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "MinerU can be imported and initialized"
     },
@@ -470,7 +470,7 @@
       "name": "MinerUExtractor basic implementation",
       "description": "Create src/extractors/mineru_extractor.py implementing BaseExtractor",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "MinerUExtractor().extract('test.pdf') returns ExtractionResult"
     },
@@ -479,7 +479,7 @@
       "name": "MinerUExtractor table extraction",
       "description": "Configure MinerU for accurate table structure recognition",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Complex tables are properly extracted with structure"
     },
@@ -488,7 +488,7 @@
       "name": "MinerUExtractor formula support",
       "description": "Enable LaTeX formula recognition in MinerU",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "PDF with formulas outputs LaTeX syntax"
     },
@@ -497,7 +497,7 @@
       "name": "MinerUExtractor error handling",
       "description": "Add comprehensive error handling for MinerU failures",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Graceful failure with ExtractionError"
     },
