@@ -1,3 +1,27 @@
+## Session 72-75 - 2025-12-30 - Features #72-75: Normalization
+
+### Ce qui a été fait
+- Feature #72 : Extraction result normalization ✓
+  - normalize_markdown() standardise format markdown
+  - Line endings, blank lines, list markers, headings
+- Feature #73 : Table format standardization ✓
+  - normalize_tables() convertit vers markdown table
+  - Valide structure, fixe separator lines
+- Feature #74 : Image path standardization ✓
+  - normalize_image_paths() assure chemins relatifs
+  - Convertit absolute → relative, gestion erreurs
+- Feature #75 : Extraction metrics collection ✓
+  - collect_metrics() rassemble stats complètes
+  - Metrics: chars, lines, counts, time_per_page, confidence
+- Créé src/utils/normalizer.py avec ExtractionNormalizer (230 lignes)
+- Mis à jour `feature_list.json` : Features #72-75 → "passing", completed: 75/152
+
+### État actuel
+- **Features complétées** : 75/152 (49.34%)
+- **Prochaine feature** : #76 - Comparator class skeleton
+
+---
+
 ## Session 71 - 2025-12-30 - Feature #71: Resource monitoring
 
 ### Ce qui a été fait
