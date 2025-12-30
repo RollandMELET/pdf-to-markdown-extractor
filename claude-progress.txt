@@ -1,3 +1,30 @@
+## Session 20-22 - 2025-12-30 - Features #20-22: DoclingExtractor enhancements
+
+### Ce qui a été fait
+- Feature #20 complétée : extraction de tables avec DoclingExtractor
+  - Méthode _extract_tables() parcourt doc.iterate_items()
+  - Détecte les items de type Table
+  - Exporte en markdown avec item.export_to_markdown()
+  - Test : 1 table extraite de simple_table.pdf ✓
+- Feature #21 complétée : extraction d'images avec DoclingExtractor
+  - Méthode _extract_images() détecte les Picture items
+  - Option extract_images pour activer/désactiver
+  - Retourne références d'images (image_0, image_1, etc.)
+  - Implémenté et testé ✓
+- Feature #22 complétée : extraction de métadonnées avec DoclingExtractor
+  - Méthode _extract_metadata() extrait page_count, title, author, dates
+  - Utilise doc.pages pour page_count
+  - Utilise doc.name ou premier heading pour title
+  - Test : metadata extraites de tous les PDFs ✓
+- Mis à jour `feature_list.json` : Features #20-22 → "passing", completed: 22/152
+
+### Tests
+- text_only.pdf : 1 page, title="text_only", 0 tables, 0 images ✓
+- simple_table.pdf : 1 page, title="simple_table", 1 table, 0 images ✓
+- multi_column.pdf : 1 page, title="multi_column", 0 tables, 0 images ✓
+
+---
+
 ## Session 19 - 2025-12-30 - Feature #19: DoclingExtractor basic implementation
 
 ### Ce qui a été fait
