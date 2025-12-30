@@ -1,0 +1,128 @@
+# PDF-to-Markdown Extractor - Extractor Configuration (Feature #68)
+#
+# Configure settings for each PDF extractor
+
+# ==========================================
+# Docling Extractor
+# ==========================================
+docling:
+  enabled: true
+  priority: 1  # Higher priority = preferred extractor
+
+  # Extraction options
+  options:
+    extract_tables: true
+    extract_images: false  # Default: don't extract images
+    extract_formulas: true
+
+  # Performance
+  timeout: 300  # 5 minutes
+  max_pages: 100
+
+  # OCR settings
+  ocr:
+    enabled: true
+    languages: ["eng", "fra"]
+
+  # Capabilities (auto-detected, can override)
+  capabilities:
+    supports_tables: true
+    supports_formulas: true
+    supports_images: true
+    supports_ocr: true
+    precision: "high"
+    speed: "medium"
+
+# ==========================================
+# MinerU Extractor
+# ==========================================
+mineru:
+  enabled: false  # Default: disabled (requires manual installation)
+  priority: 2
+
+  # Extraction options
+  options:
+    extract_tables: true
+    extract_images: false
+    extract_formulas: true
+    ocr_enabled: true
+
+  # Performance
+  timeout: 600  # 10 minutes (slower than Docling)
+  max_pages: 100
+
+  # GPU settings (Feature #67)
+  gpu:
+    enabled: true  # Use GPU if available
+    device: "auto"  # auto, cuda:0, cpu
+
+  # Capabilities
+  capabilities:
+    supports_tables: true
+    supports_formulas: true
+    supports_images: true
+    supports_ocr: true
+    supports_complex_layouts: true
+    precision: "high"
+    speed: "medium"  # Without GPU, "fast" with GPU
+
+# ==========================================
+# Mistral Extractor (Future Feature)
+# ==========================================
+mistral:
+  enabled: false  # Will be implemented in Phase 3
+  priority: 3
+
+  # API settings
+  api:
+    timeout: 120
+    max_retries: 3
+
+  # Extraction options
+  options:
+    model: "pixtral-12b"  # Mistral vision model
+    extract_tables: true
+    extract_images: false
+
+  # Cost management
+  cost:
+    max_cost_per_page: 0.002  # USD
+
+  # Capabilities
+  capabilities:
+    supports_tables: true
+    supports_formulas: false
+    supports_images: true
+    supports_ocr: true
+    precision: "medium"
+    speed: "fast"
+
+# ==========================================
+# Global Extractor Settings
+# ==========================================
+global:
+  # Default extractor if none specified
+  default_extractor: "docling"
+
+  # Parallel extraction
+  parallel:
+    max_workers: 3
+    timeout: 900  # 15 minutes total
+    memory_threshold_gb: 2.0
+
+  # Fallback chain
+  fallback_order:
+    - "docling"
+    - "mineru"
+    - "mistral"
+
+  # Similarity comparison
+  similarity:
+    threshold: 0.85
+    algorithm: "difflib"  # difflib, levenshtein
+
+  # Retry settings
+  retry:
+    max_attempts: 3
+    delay_seconds: 60
+    backoff_multiplier: 2
