@@ -1,3 +1,30 @@
+## Session 61 - 2025-12-30 - Feature #61: Orchestrator parallel pipeline
+
+### Ce qui a été fait
+- Feature #61 : Orchestrator complex pipeline ✓
+  - Intégré ParallelExecutor et ExtractionAggregator dans Orchestrator
+  - Méthode extract() route selon stratégie :
+    - "fallback" : extracteur unique (Docling)
+    - "parallel_local" : Docling + MinerU en parallèle
+    - Returns: result, all_results, aggregation, complexity, strategy_used
+  - Fallback automatique si < 2 extracteurs locaux disponibles
+  - Utilise meilleur résultat (highest confidence) comme résultat principal
+- Flux d'extraction parallèle :
+  1. Analyse complexité
+  2. Sélectionne extracteurs (Docling + MinerU)
+  3. Execute en parallèle avec ParallelExecutor
+  4. Agrège avec ExtractionAggregator
+  5. Retourne best_result + détails complets
+- Stratégies "parallel_all" et "hybrid" : pas encore implémentées (fallback)
+- Mis à jour `feature_list.json` : Feature #61 → "passing", completed: 61/152
+
+### État actuel
+- **Features complétées** : 61/152 (40.13%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79)
+- **Prochaine feature** : #62 - Test parallel extraction
+
+---
+
 ## Session 60 - 2025-12-30 - Feature #60: Memory management
 
 ### Ce qui a été fait
