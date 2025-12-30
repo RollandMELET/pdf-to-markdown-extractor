@@ -1,5 +1,23 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 13 - 2025-12-30 - Feature #13: Sample PDF fixtures
+
+### Ce qui a été fait
+- Feature #13 complétée : création de 3 PDFs de test avec PyMuPDF
+  - `text_only.pdf` (2.0K) : document texte simple, 5 paragraphes
+  - `simple_table.pdf` (5.0K) : document avec tableau 3x5
+  - `multi_column.pdf` (1.5K) : layout 2 colonnes
+  - Générés avec fitz (PyMuPDF) déjà dans requirements.txt
+  - Placés dans tests/fixtures/simple/
+  - Validation : 3 fichiers PDF créés et copiés ✓
+- Mis à jour `feature_list.json` : Feature #13 → "passing", completed: 13/152
+
+### État actuel
+- **Features complétées** : 13/152 (8.55%)
+- **Prochaine feature** : #14 - init.sh script verification
+
+---
+
 ## Session 12 - 2025-12-30 - Feature #12: Test fixtures directory structure
 
 ### Ce qui a été fait
