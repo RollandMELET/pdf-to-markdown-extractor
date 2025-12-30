@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 1,
+  "completed": 2,
   "features": [
     {
       "id": 1,
@@ -20,7 +20,7 @@
       "name": "Requirements.txt with pinned versions",
       "description": "Create requirements.txt with all dependencies: fastapi, celery, redis, docling, pymupdf, streamlit, pytest",
       "category": "Phase 1 - Infrastructure",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "pip install -r requirements.txt succeeds without errors"
     },

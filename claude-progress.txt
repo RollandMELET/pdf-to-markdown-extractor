@@ -1,5 +1,43 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 3 - 2025-12-30 - Feature #2: Requirements.txt with pinned versions
+
+### Ce qui a été fait
+- Feature #2 complétée : création de requirements.txt avec toutes les dépendances
+  - 50+ packages avec versions exactes pinnées
+  - Résolution de conflit : httpx==0.27.2 (compatible avec mistralai 1.2.4)
+  - Organisé en sections : API, Queue, Extractors, Testing, Code Quality, etc.
+  - Validation : `pip install --dry-run -r requirements.txt` → SUCCESS
+  - Note spéciale pour MinerU (installation séparée due à complexité)
+- Mis à jour `feature_list.json` : Feature #2 → "passing", completed: 2/152
+- Commit précédent : fix(.gitignore) pour permettre tracking de src/api/models/
+
+### État actuel
+- **Features complétées** : 2/152 (1.32%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #3 - Dockerfile for API service
+
+### Dépendances principales installées
+- FastAPI 0.115.5 + uvicorn 0.32.1
+- Celery 5.4.0 + Redis 5.2.1
+- Docling 2.13.0 (extraction principale)
+- PyMuPDF 1.25.2
+- Mistral AI 1.2.4 (API OCR)
+- Streamlit 1.40.2 (interface arbitrage)
+- pytest 8.3.4 + plugins (asyncio, cov, mock)
+
+### Blocages / Questions
+- Aucun blocage
+- MinerU sera installé séparément (complexité des dépendances GPU/CUDA)
+
+### Notes pour la prochaine session
+1. Feature #3 : créer Dockerfile pour le service API
+2. Base image : Python 3.11 (ou 3.12)
+3. Installer dépendances système : poppler-utils, tesseract-ocr
+4. Multi-stage build recommandé pour optimiser la taille de l'image
+
+---
+
 ## Session 2 - 2025-12-30 - Feature #1: Project structure initialization
 
 ### Ce qui a été fait

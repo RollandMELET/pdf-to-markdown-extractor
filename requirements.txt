@@ -1,0 +1,87 @@
+# PDF-to-Markdown Extractor - Dependencies
+# Python 3.11+ required
+
+# ==========================================
+# API Framework
+# ==========================================
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+pydantic==2.10.3
+pydantic-settings==2.6.1
+python-multipart==0.0.18  # For file uploads
+
+# ==========================================
+# Async Task Queue
+# ==========================================
+celery==5.4.0
+redis==5.2.1
+kombu==5.4.2  # Celery dependency
+
+# ==========================================
+# PDF Extraction Engines
+# ==========================================
+docling==2.13.0
+pymupdf==1.25.2  # Also known as fitz
+Pillow==11.0.0  # Image processing
+pypdf==5.1.0  # PDF utilities
+
+# ==========================================
+# MinerU (High precision extraction)
+# ==========================================
+# Note: MinerU is installed separately due to complex dependencies
+# See docs/INSTALLATION.md for MinerU setup instructions
+
+# ==========================================
+# Mistral AI API
+# ==========================================
+mistralai==1.2.4
+
+# ==========================================
+# Arbitration Interface
+# ==========================================
+streamlit==1.40.2
+
+# ==========================================
+# Configuration & Environment
+# ==========================================
+python-dotenv==1.0.1
+pyyaml==6.0.2
+
+# ==========================================
+# HTTP Client
+# ==========================================
+httpx==0.27.2  # Note: 0.28+ incompatible with mistralai 1.2.4
+aiofiles==24.1.0
+
+# ==========================================
+# Data Validation & Processing
+# ==========================================
+python-magic==0.4.27  # MIME type detection
+filetype==1.2.0  # File type validation
+
+# ==========================================
+# Markdown Processing
+# ==========================================
+markdown==3.7
+python-markdown-math==0.8
+
+# ==========================================
+# Testing
+# ==========================================
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+pytest-mock==3.14.0
+# httpx already listed in HTTP Client section
+
+# ==========================================
+# Code Quality (Development)
+# ==========================================
+black==24.10.0
+ruff==0.8.4
+mypy==1.13.0
+
+# ==========================================
+# Logging & Monitoring
+# ==========================================
+loguru==0.7.3
