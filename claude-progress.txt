@@ -1,3 +1,26 @@
+## Session 60 - 2025-12-30 - Feature #60: Memory management
+
+### Ce qui a été fait
+- Feature #60 : Memory management for parallel extraction ✓
+  - Ajouté _check_memory() dans ParallelExecutor
+  - Utilise psutil pour vérifier RAM disponible
+  - Paramètre memory_threshold_gb configurable (défaut: 2.0 GB)
+  - Log warning si mémoire disponible < seuil
+  - Continue l'exécution avec warning (ne bloque pas)
+  - Fallback gracieux si check échoue
+- Intégration :
+  - Appelé au début de execute()
+  - Logs mémoire disponible vs threshold
+  - Aide à prévenir erreurs OOM avec gros PDFs
+- Mis à jour `feature_list.json` : Feature #60 → "passing", completed: 60/152
+
+### État actuel
+- **Features complétées** : 60/152 (39.47%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79)
+- **Prochaine feature** : #61 - Orchestrator complex pipeline
+
+---
+
 ## Session 59 - 2025-12-30 - Feature #59: ExtractionAggregator
 
 ### Ce qui a été fait
