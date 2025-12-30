@@ -1,3 +1,21 @@
+## Session 71 - 2025-12-30 - Feature #71: Resource monitoring
+
+### Ce qui a été fait
+- Feature #71 : Resource usage monitoring ✓
+  - Créé src/utils/resource_monitor.py avec ResourceMonitor (180 lignes)
+  - Méthodes : start(), sample(), stop(), get_current_usage()
+  - Statistics : duration, memory (start/end/peak/delta), avg_cpu, samples
+  - System metrics : memory_percent, available_gb, cpu_percent
+  - Utilise psutil pour monitoring process et system
+- Use cases : detect memory leaks, profiling performance, prevent OOM
+- Mis à jour `feature_list.json` : Feature #71 → "passing", completed: 71/152
+
+### État actuel
+- **Features complétées** : 71/152 (46.71%)
+- **Prochaine feature** : #72 - Extraction result normalization
+
+---
+
 ## Session 70 - 2025-12-30 - Feature #70: MinerU VLM mode
 
 ### Ce qui a été fait
