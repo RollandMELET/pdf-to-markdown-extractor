@@ -73,7 +73,9 @@ Thumbs.db
 .ipynb_checkpoints/
 
 # Model cache (can be large)
-models/
+# Ignore model directories but not src/api/models (API models code)
+/models/
+data/models/
 *.pt
 *.pth
 *.onnx
