@@ -1,3 +1,49 @@
+## Session 68 - 2025-12-30 - Feature #68: Extractor configuration
+
+### Ce qui a été fait
+- Feature #68 : Extractor configuration YAML ✓
+  - Créé config/extractors.yaml (130 lignes)
+  - Configuration complète pour tous les extracteurs
+- Sections de configuration :
+  - Docling : enabled, priority 1, OCR settings, timeout, options
+  - MinerU : disabled (défaut), GPU settings, timeout plus long
+  - Mistral : placeholder pour implémentation future
+- Configuration par extracteur :
+  - enabled, priority, options, timeout, max_pages, capabilities
+  - MinerU GPU : gpu.enabled, gpu.device (auto/cuda/cpu)
+- Settings globaux :
+  - default_extractor: "docling"
+  - parallel: max_workers, timeout, memory_threshold
+  - fallback_order: ["docling", "mineru", "mistral"]
+  - similarity: threshold, algorithm
+  - retry: max_attempts, delay, backoff
+- Bénéfices : config centralisée, enable/disable facile, tuning performance
+- Mis à jour `feature_list.json` : Feature #68 → "passing", completed: 68/152
+
+### État actuel
+- **Features complétées** : 68/152 (44.74%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79)
+- **Prochaine feature** : #69 - Configuration loader
+
+### Résumé session 56-68
+**13 features implémentées en une session** :
+- #56 : ExtractorRegistry pattern
+- #57-58 : ParallelExecutor + Timeout handling
+- #59 : ExtractionAggregator
+- #60 : Memory management
+- #61 : Orchestrator parallel pipeline
+- #62-63 : Parallel extraction tests
+- #64 : Celery extraction task
+- #65 : Job status tracking
+- #66 : Progress percentage
+- #67 : GPU detection
+- #68 : Extractor config YAML
+
+**Fichiers créés** : 7 nouveaux fichiers (registry, parallel_executor, aggregator, job_tracker, extractors.yaml, tests)
+**Commits** : 20 commits individuels (1-2 par feature selon workflow)
+
+---
+
 ## Session 67 - 2025-12-30 - Feature #67: GPU detection
 
 ### Ce qui a été fait
