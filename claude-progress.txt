@@ -1,3 +1,32 @@
+## Session 57-58 - 2025-12-30 - Features #57-58: ParallelExecutor
+
+### Ce qui a été fait
+- Feature #57 : Parallel extraction executor ✓
+  - Créé src/core/parallel_executor.py avec classe ParallelExecutor (170 lignes)
+  - Utilise ThreadPoolExecutor pour extractions parallèles
+  - Méthode execute() lance plusieurs extracteurs simultanément
+  - Retourne dict {extractor_name: ExtractionResult}
+  - Configurable max_workers (défaut: 3)
+  - Collecte résultats avec as_completed()
+- Feature #58 : Extraction timeout handling ✓
+  - Paramètre timeout configurable
+  - Capture TimeoutError et log approprié
+  - Continue avec extracteurs réussis si un timeout
+  - Timeout global pour toutes les extractions
+- Bénéfices :
+  - Extraction parallèle pour documents complexes
+  - Réduction temps total (extracteurs s'exécutent ensemble)
+  - Robustesse avec timeout protection
+  - Logging détaillé par extracteur
+- Mis à jour `feature_list.json` : Features #57-58 → "passing", completed: 58/152
+
+### État actuel
+- **Features complétées** : 58/152 (38.16%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79)
+- **Prochaine feature** : #59 - Extraction result aggregator
+
+---
+
 ## Session 56 - 2025-12-30 - Feature #56: ExtractorRegistry
 
 ### Ce qui a été fait
