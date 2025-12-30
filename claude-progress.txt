@@ -1,5 +1,51 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 4 - 2025-12-30 - Feature #3: Dockerfile for API service
+
+### Ce qui a été fait
+- Feature #3 complétée : création du Dockerfile pour le service API
+  - Multi-stage build pour optimiser la taille de l'image
+  - Stage 1 (builder) : compilation et installation des dépendances Python
+  - Stage 2 (runtime) : image légère avec seulement le nécessaire
+  - Dépendances système installées : poppler-utils, tesseract-ocr (fra+eng), libmagic1
+  - Image finale : 2.79GB (content size: 612MB)
+  - Validation : `docker build -t pdf-extractor .` → SUCCESS (93s)
+  - Test runtime : container démarre et API répond ✓
+- Créé `src/api/main.py` (stub minimal FastAPI pour test du Dockerfile)
+- Mis à jour `feature_list.json` : Feature #3 → "passing", completed: 3/152
+
+### État actuel
+- **Features complétées** : 3/152 (1.97%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #4 - docker-compose.yml base setup
+
+### Dockerfile caractéristiques
+- Base image : Python 3.11-slim
+- Multi-stage : builder + runtime (optimisation taille)
+- Système : poppler-utils, tesseract-ocr (fra+eng), libmagic1, fonts-liberation
+- Port exposé : 8000
+- Volumes : /app/data/{uploads,outputs,cache}
+- CMD par défaut : uvicorn src.api.main:app
+
+### Test de build
+```
+Build time: ~93 secondes
+Image size: 2.79GB (normal pour ML/PDF processing)
+Content size: 612MB
+Test startup: ✓ API répond sur port 8000
+```
+
+### Blocages / Questions
+- Aucun blocage
+
+### Notes pour la prochaine session
+1. Feature #4 : créer docker-compose.yml avec services (api, worker, redis)
+2. Configurer les volumes pour persistance des données
+3. Définir les networks entre services
+4. Tester `docker-compose up -d`
+
+---
+
 ## Session 3 - 2025-12-30 - Feature #2: Requirements.txt with pinned versions
 
 ### Ce qui a été fait
