@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 28,
+  "completed": 31,
   "features": [
     {
       "id": 1,
@@ -263,7 +263,7 @@
       "name": "Test DoclingExtractor with text_only.pdf",
       "description": "Write test that extracts text_only.pdf and verifies markdown output",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "pytest tests/test_extractors.py::test_docling_text_only passes"
     },
@@ -272,7 +272,7 @@
       "name": "Test DoclingExtractor with simple_table.pdf",
       "description": "Write test that verifies table is properly converted to markdown",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "pytest tests/test_extractors.py::test_docling_simple_table passes"
     },
@@ -281,7 +281,7 @@
       "name": "Test DoclingExtractor error cases",
       "description": "Write tests for corrupted PDF, empty PDF, non-existent file",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "All error case tests pass with appropriate exceptions"
     },

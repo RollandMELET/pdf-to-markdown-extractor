@@ -1,3 +1,15 @@
+## Session 29-31 - 2025-12-30 - Features #29-31: DoclingExtractor tests
+
+### Ce qui a été fait
+- Créé `tests/test_docling_extractor.py` avec tests complets
+- Feature #29 : test text_only.pdf extraction (3 tests) ✓
+- Feature #30 : test simple_table.pdf table extraction (3 tests) ✓
+- Feature #31 : test error cases (6 tests) ✓
+- Total : 15 tests passed, 1 skipped
+- Mis à jour `feature_list.json` : Features #29-31 → "passing", completed: 31/152
+
+---
+
 ## Session 27-28 - 2025-12-30 - Features #27-28: Markdown/metadata writers
 
 ### Ce qui a été fait
