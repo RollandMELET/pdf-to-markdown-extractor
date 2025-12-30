@@ -1,3 +1,22 @@
+## Session 16-17 - 2025-12-30 - Features #16-17: BaseExtractor & ExtractionResult
+
+### Ce qui a été fait
+- Feature #16 complétée : BaseExtractor abstract class
+  - Créé `src/extractors/base.py` avec classe abstraite BaseExtractor
+  - Méthodes abstraites : extract(), is_available(), get_capabilities()
+  - Méthodes utilitaires : validate_file(), get_info()
+  - Attributs : name, version, description
+- Feature #17 complétée : ExtractionResult dataclass
+  - Dataclass complète avec tous les champs requis
+  - Champs : markdown, metadata, images, tables, confidence_score, etc.
+  - Validation automatique (confidence 0.0-1.0)
+  - Propriétés : success, has_warnings, has_errors, image_count, table_count
+  - Méthode to_dict() pour sérialisation JSON
+  - Tests passent ✓
+- Mis à jour `feature_list.json` : Features #16-17 → "passing", completed: 17/152
+
+---
+
 ## Session 15 - 2025-12-30 - Feature #15: Git repository initialization
 
 ### Ce qui a été fait

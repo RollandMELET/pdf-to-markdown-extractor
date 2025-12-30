@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 15,
+  "completed": 17,
   "features": [
     {
       "id": 1,
@@ -146,7 +146,7 @@
       "name": "BaseExtractor abstract class",
       "description": "Create src/extractors/base.py with BaseExtractor ABC defining extract(), is_available(), get_capabilities()",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Class can be imported, has all required abstract methods"
     },
@@ -155,7 +155,7 @@
       "name": "ExtractionResult dataclass",
       "description": "Create ExtractionResult in base.py with markdown, metadata, images, tables, confidence_score fields",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "ExtractionResult can be instantiated with all fields"
     },
