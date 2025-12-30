@@ -1,3 +1,17 @@
+## Session 25 - 2025-12-30 - Feature #25: Simple extraction pipeline
+
+### Ce qui a été fait
+- Feature #25 complétée : pipeline d'extraction simple avec Orchestrator
+  - Créé `src/core/orchestrator.py` avec classe Orchestrator
+  - Auto-registration des extracteurs disponibles
+  - Méthode extract_simple() pour extraction single-extractor
+  - Méthode get_available_extractors() liste extracteurs
+  - Méthode get_extractor(name) récupère un extracteur
+  - Test : extraction text_only.pdf réussie (437 chars, 19s) ✓
+- Mis à jour `feature_list.json` : Feature #25 → "passing", completed: 25/152
+
+---
+
 ## Session 23-24 - 2025-12-30 - Features #23-24: DoclingExtractor validation
 
 ### Ce qui a été fait

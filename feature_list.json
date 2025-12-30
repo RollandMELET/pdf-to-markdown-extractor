@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 24,
+  "completed": 25,
   "features": [
     {
       "id": 1,
@@ -227,7 +227,7 @@
       "name": "Simple extraction pipeline",
       "description": "Create src/core/orchestrator.py with extract_simple() that uses DoclingExtractor",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "orchestrator.extract_simple('test.pdf') returns ExtractionResult"
     },
