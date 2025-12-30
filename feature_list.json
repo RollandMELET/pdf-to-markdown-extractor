@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 25,
+  "completed": 26,
   "features": [
     {
       "id": 1,
@@ -236,7 +236,7 @@
       "name": "Output directory management",
       "description": "Create src/utils/file_utils.py with create_output_dir(), cleanup_old_outputs()",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "create_output_dir() creates timestamped folder, returns path"
     },

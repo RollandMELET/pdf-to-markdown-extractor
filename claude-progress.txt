@@ -1,3 +1,18 @@
+## Session 26 - 2025-12-30 - Feature #26: Output directory management
+
+### Ce qui a été fait
+- Créé `src/utils/file_utils.py` avec utilitaires fichiers
+  - create_output_dir() : crée répertoire avec timestamp
+  - cleanup_old_outputs() : nettoie anciens outputs
+  - get_file_info() : info fichier (taille, date, etc.)
+  - ensure_directory() : crée répertoire si inexistant
+  - safe_filename() : sanitize noms de fichiers
+  - copy_file_to_upload() : copie vers upload_dir
+  - Tests : all functions working ✓
+- Mis à jour `feature_list.json` : Feature #26 → "passing", completed: 26/152
+
+---
+
 ## Session 25 - 2025-12-30 - Feature #25: Simple extraction pipeline
 
 ### Ce qui a été fait
