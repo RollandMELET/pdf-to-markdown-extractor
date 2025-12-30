@@ -1,5 +1,81 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 7 - 2025-12-30 - Feature #7: Celery app configuration
+
+### Ce qui a été fait
+- Feature #7 complétée : enrichissement de la configuration Celery
+  - Configuration depuis variables d'environnement (REDIS_URL, CELERY_BROKER_URL, etc.)
+  - Task execution : time_limit 600s, soft_time_limit 540s, track_started=true
+  - Task acknowledgement : acks_late=true (acknowledge après completion)
+  - Worker : prefetch_multiplier=1 (une tâche à la fois), max_tasks_per_child=50
+  - Result backend : expires après 24h, persistent=true
+  - Retry policy : max_retries=3, retry_delay=60s
+  - Broker connection : retry on startup, max_retries=10
+  - Task routing : queue "pdf-extraction" avec exchange
+  - Monitoring : worker_send_task_events=true, task_send_sent_event=true
+  - Event handlers : setup_periodic_tasks placeholder pour futures tâches périodiques
+  - Task health_check enrichie avec bind=True et worker hostname
+  - Validation : worker démarre et se connecte à redis ✓
+- Créé `src/core/tasks.py` (placeholder pour autodiscovery des futures tâches)
+- Mis à jour `feature_list.json` : Feature #7 → "passing", completed: 7/152
+
+### État actuel
+- **Features complétées** : 7/152 (4.61%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #8 - Redis connection helper
+
+### Celery configuration caractéristiques
+**Configuration avancée** :
+- Serialization : JSON (task, result, accept_content)
+- Timezone : UTC
+- Task tracking : started + sent events
+- Time limits : 10min hard, 9min soft
+- Prefetch : 1 (évite overload)
+- Max tasks per child : 50 (memory leak protection)
+
+**Queues** :
+- Default queue : "pdf-extraction"
+- Exchange : "pdf-extraction" (direct)
+- Routing key : "pdf.extraction"
+
+**Retry & Reliability** :
+- Default retries : 3
+- Retry delay : 60 seconds
+- Acks late : true (reliability)
+- Broker retry on startup : true
+
+**Monitoring** :
+- Task events : enabled
+- Worker events : enabled
+- Result persistence : 24 hours
+
+### Tests réussis
+```
+✓ docker-compose build worker : image reconstruite
+✓ docker-compose up -d : worker démarre
+✓ Worker logs :
+  - app: pdf-extractor
+  - transport: redis://redis:6379/0
+  - results: redis://redis:6379/0
+  - concurrency: 2 (prefork)
+  - task events: ON
+  - queue: pdf-extraction
+  - task registered: pdf_extractor.health_check
+✓ Connected to redis://redis:6379/0
+✓ Worker ready: celery@dbc0e4516774
+✓ celery inspect active : 1 node online
+```
+
+### Blocages / Questions
+- Aucun blocage
+
+### Notes pour la prochaine session
+1. Feature #8 : Redis connection helper (src/utils/redis_client.py)
+2. Connection pooling pour performance
+3. Health check pour monitoring
+
+---
+
 ## Session 6 - 2025-12-30 - Features #5 & #6: .env.example + FastAPI skeleton
 
 ### Ce qui a été fait
