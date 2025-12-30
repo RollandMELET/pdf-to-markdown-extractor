@@ -12,6 +12,40 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 
+class ExtractionError(Exception):
+    """
+    Exception raised when PDF extraction fails.
+
+    This is used by extractors to provide detailed error information
+    when extraction cannot be completed.
+
+    Attributes:
+        extractor: Name of the extractor that failed.
+        message: Error message describing what went wrong.
+        file_path: Path to the PDF file that failed to extract.
+        original_error: The original exception that caused the failure (if any).
+    """
+
+    def __init__(
+        self,
+        extractor: str,
+        message: str,
+        file_path: str,
+        original_error: Optional[Exception] = None,
+    ):
+        """Initialize ExtractionError."""
+        self.extractor = extractor
+        self.message = message
+        self.file_path = file_path
+        self.original_error = original_error
+
+        error_msg = f"[{extractor}] {message} (file: {file_path})"
+        if original_error:
+            error_msg += f" | Original error: {original_error}"
+
+        super().__init__(error_msg)
+
+
 @dataclass
 class ExtractionResult:
     """
