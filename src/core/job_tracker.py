@@ -63,21 +63,24 @@ class JobTracker:
         job_id: str,
         status: JobStatus,
         metadata: Optional[Dict[str, Any]] = None,
+        progress_percentage: Optional[float] = None,
     ) -> None:
         """
-        Store job status in Redis (Feature #65).
+        Store job status in Redis (Features #65-66).
 
         Args:
             job_id: Unique job identifier.
             status: Job status (pending, extracting, comparing, completed, failed).
             metadata: Additional job metadata (file_path, strategy, etc.).
+            progress_percentage: Progress percentage 0-100 (Feature #66).
 
         Example:
             >>> tracker = JobTracker()
             >>> tracker.set_status(
             ...     "job-123",
             ...     JobStatus.EXTRACTING,
-            ...     {"file": "document.pdf", "strategy": "parallel_local"}
+            ...     {"file": "document.pdf"},
+            ...     progress_percentage=50.0
             ... )
         """
         key = f"job:{job_id}:status"
@@ -88,6 +91,10 @@ class JobTracker:
             "updated_at": datetime.utcnow().isoformat(),
         }
 
+        # Feature #66: Add progress percentage
+        if progress_percentage is not None:
+            status_data["progress_percentage"] = min(100.0, max(0.0, progress_percentage))
+
         if metadata:
             status_data["metadata"] = metadata
 
@@ -95,7 +102,10 @@ class JobTracker:
             # Store as JSON
             self.redis_client.set(key, json.dumps(status_data), ex=self.ttl)
 
-            logger.debug(f"Job status updated: {job_id} -> {status.value}")
+            logger.debug(
+                f"Job status updated: {job_id} -> {status.value} "
+                f"({progress_percentage}%)" if progress_percentage else ""
+            )
 
         except Exception as e:
             logger.warning(f"Failed to set job status: {e}")

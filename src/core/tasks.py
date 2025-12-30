@@ -52,19 +52,20 @@ def extract_pdf_task(
 
     logger.info(f"Celery task started: extract_pdf (job_id={job_id}, file={file_path})")
 
-    # Feature #65: Set initial status
+    # Feature #65-66: Set initial status with progress
     tracker.set_status(
         job_id,
         JobStatus.PENDING,
-        metadata={"file_path": file_path, "strategy": strategy}
+        metadata={"file_path": file_path, "strategy": strategy},
+        progress_percentage=0.0
     )
 
     try:
         # Convert string path to Path object
         pdf_path = Path(file_path)
 
-        # Feature #65: Update status to extracting
-        tracker.set_status(job_id, JobStatus.EXTRACTING)
+        # Feature #65-66: Update status to extracting
+        tracker.set_status(job_id, JobStatus.EXTRACTING, progress_percentage=25.0)
 
         # Create orchestrator
         orchestrator = Orchestrator()
@@ -77,18 +78,19 @@ def extract_pdf_task(
             options=options,
         )
 
-        # Feature #65: Update status if comparing (parallel extraction)
+        # Feature #65-66: Update status if comparing (parallel extraction)
         if "aggregation" in extraction_result:
-            tracker.set_status(job_id, JobStatus.COMPARING)
+            tracker.set_status(job_id, JobStatus.COMPARING, progress_percentage=75.0)
 
         # Serialize ExtractionResult for Celery
         serialized = self._serialize_result(extraction_result)
 
-        # Feature #65: Update status to completed
+        # Feature #65-66: Update status to completed
         tracker.set_status(
             job_id,
             JobStatus.COMPLETED,
-            metadata={"success": True, "confidence": serialized.get("result", {}).get("confidence_score")}
+            metadata={"success": True, "confidence": serialized.get("result", {}).get("confidence_score")},
+            progress_percentage=100.0
         )
 
         logger.info(f"Celery task completed: extract_pdf (job_id={job_id}, file={file_path})")
