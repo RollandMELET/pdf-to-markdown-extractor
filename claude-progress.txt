@@ -1,3 +1,30 @@
+## Session 67 - 2025-12-30 - Feature #67: GPU detection
+
+### Ce qui a été fait
+- Feature #67 : MinerU GPU detection ✓
+  - Ajouté _check_gpu() dans MinerUExtractor
+  - Détecte CUDA/GPU via PyTorch (torch.cuda.is_available())
+  - Récupère nom GPU avec torch.cuda.get_device_name()
+  - Logs détection GPU ou fallback CPU
+  - Méthode has_gpu() retourne statut GPU
+- Intégration dans get_capabilities() :
+  - Champ gpu_available: bool
+  - speed: "fast" avec GPU, "medium" avec CPU
+- Flux détection GPU :
+  1. Import torch
+  2. Check torch.cuda.is_available()
+  3. Log GPU name si disponible
+  4. Fallback CPU si pas GPU ou PyTorch manquant
+- Bénéfices : utilisation auto GPU, optimisation performance, fallback gracieux
+- Mis à jour `feature_list.json` : Feature #67 → "passing", completed: 67/152
+
+### État actuel
+- **Features complétées** : 67/152 (44.08%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79)
+- **Prochaine feature** : #68 - Extractor configuration YAML
+
+---
+
 ## Session 66 - 2025-12-30 - Feature #66: Progress percentage
 
 ### Ce qui a été fait
