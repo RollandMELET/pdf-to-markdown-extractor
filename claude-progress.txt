@@ -1,5 +1,96 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 9 - 2025-12-30 - Feature #9: Logging configuration
+
+### Ce qui a été fait
+- Feature #9 complétée : configuration centralisée du logging avec loguru
+  - Créé `src/utils/logging_config.py` avec configuration structurée
+  - Format JSON pour production (machine-readable)
+  - Format texte colorisé pour développement
+  - Configuration depuis variables d'environnement
+  - Log rotation : 100 MB par défaut
+  - Log retention : 30 jours par défaut
+  - Compression : zip
+  - Fichiers de logs séparés : app.log (tous niveaux) et errors.log (erreurs uniquement)
+  - Context managers : `add_request_context()` et `add_task_context()`
+  - Intercepteur pour standard library logging
+  - Fonction utilitaire : `setup_logging()` et `get_logger()`
+  - Validation : tous les tests passent ✓
+- Mis à jour `feature_list.json` : Feature #9 → "passing", completed: 9/152
+
+### État actuel
+- **Features complétées** : 9/152 (5.92%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #10 - Configuration settings loader
+
+### Logging configuration caractéristiques
+**Formats disponibles** :
+- JSON : `{"timestamp": "...", "level": "...", "message": "...", "extra": {...}}`
+- Text : `2025-12-30 14:16:35.317 | INFO | module:function:line - message`
+
+**Configuration environnement** :
+- `LOG_LEVEL` : DEBUG, INFO, WARNING, ERROR, CRITICAL (défaut: INFO)
+- `LOG_FORMAT` : json ou text (défaut: json)
+- `LOG_DIR` : répertoire des logs (défaut: /app/logs)
+- `LOG_ROTATION` : rotation par taille (défaut: 100 MB)
+- `LOG_RETENTION` : durée de conservation (défaut: 30 days)
+- `LOG_COMPRESSION` : format compression (défaut: zip)
+
+**Fichiers de logs** :
+- `app.log` : tous les niveaux de log (JSON sérialisé)
+- `errors.log` : erreurs uniquement (ERROR et CRITICAL)
+- Rotation automatique quand taille atteinte
+- Compression des anciens logs
+- Nettoyage automatique après retention
+
+**Context managers** :
+```python
+# Request context
+with add_request_context("req-123", "user-456"):
+    logger.info("Processing request")
+    # Logs include request_id and user_id
+
+# Task context
+with add_task_context("task-abc", "extract_pdf"):
+    logger.info("Task started")
+    # Logs include task_id and task_name
+```
+
+**Usage** :
+```python
+from src.utils.logging_config import setup_logging, get_logger
+
+# Setup (call once at startup)
+setup_logging(level="INFO", log_format="json")
+
+# Get logger
+logger = get_logger()
+logger.info("Application started", extra={"version": "1.0.0"})
+```
+
+### Tests réussis
+```
+✓ JSON format logging with timestamp, level, message, extra
+✓ Text format logging with colors
+✓ Log levels (DEBUG, INFO, WARNING, ERROR)
+✓ Extra fields in JSON output
+✓ Request context manager
+✓ Task context manager
+✓ File logging (app.log created with 7 entries)
+✓ Error logging (errors.log created with 1 entry)
+```
+
+### Blocages / Questions
+- Aucun blocage
+
+### Notes pour la prochaine session
+1. Feature #10 : Configuration settings loader (src/core/config.py)
+2. Centraliser toutes les variables d'environnement
+3. Support YAML + .env avec priorités
+4. Intégrer avec logging_config
+
+---
+
 ## Session 8 - 2025-12-30 - Feature #8: Redis connection helper
 
 ### Ce qui a été fait
