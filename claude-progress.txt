@@ -1,5 +1,102 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 10 - 2025-12-30 - Feature #10: Config management with Pydantic Settings
+
+### Ce qui a été fait
+- Feature #10 complétée : gestion centralisée de la configuration avec Pydantic Settings
+  - Créé `src/core/config.py` avec classe `Settings`
+  - Validation de type complète avec Pydantic
+  - Chargement depuis variables d'environnement + .env file
+  - Sections : API, Redis, Celery, Logging, API Keys, Limits, Storage, CORS
+  - Validators personnalisés : log_level uppercase, celery URLs par défaut
+  - Computed properties : max_file_size_bytes, is_production, is_development
+  - Méthodes utilitaires : ensure_directories(), get_summary(), _mask_url()
+  - Instance globale singleton : `settings`
+  - Fonctions : get_settings(), reload_settings()
+  - Validation : tous les tests passent ✓
+- Mis à jour `feature_list.json` : Feature #10 → "passing", completed: 10/152
+
+### État actuel
+- **Features complétées** : 10/152 (6.58%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #11 - Basic test structure (pytest.ini)
+
+### Configuration caractéristiques
+**Sections de configuration** :
+- **Application** : app_name, app_version, environment
+- **API** : api_port (8000), api_host, api_workers, api_reload
+- **Redis** : redis_url, redis_max_connections (20), redis_socket_timeout (5s)
+- **Celery** : broker_url, result_backend, time_limits, prefetch, max_tasks
+- **Logging** : log_level, log_format, log_dir, rotation, retention, compression
+- **External APIs** : mistral_api_key
+- **Limits** : max_file_size_mb (50), max_pages (100), extraction_timeout (600s)
+- **Storage** : upload_dir, output_dir, cache_dir
+- **Extraction** : default_strategy (fallback), similarity_threshold (0.85)
+- **CORS** : cors_origins, cors_allow_credentials
+
+**Validators** :
+- `log_level` : auto-uppercase (INFO, DEBUG, etc.)
+- `celery_broker_url` : defaults to redis_url if not set
+- `celery_result_backend` : defaults to redis_url if not set
+
+**Computed Properties** :
+- `max_file_size_bytes` : conversion MB → bytes
+- `is_production` : environment == "production"
+- `is_development` : environment == "development"
+
+**Méthodes** :
+- `ensure_directories()` : crée tous les répertoires nécessaires
+- `get_summary()` : résumé de config (safe pour logging, masque secrets)
+- `_mask_url()` : masque credentials dans URLs (redis://***:***@host)
+
+**Usage** :
+```python
+from src.core.config import settings
+
+# Accès direct
+print(settings.api_port)  # 8000
+print(settings.redis_url)  # redis://redis:6379/0
+print(settings.log_level)  # INFO
+
+# Computed properties
+print(settings.max_file_size_bytes)  # 52428800
+print(settings.is_production)  # True
+
+# Summary (safe for logging)
+summary = settings.get_summary()
+print(summary['redis_url'])  # redis://redis:6379/0 (no creds to mask)
+
+# Ensure directories exist
+settings.ensure_directories()
+```
+
+**Type Safety** :
+- Tous les champs sont typés (int, str, Path, Literal, etc.)
+- Validation automatique à l'import
+- Erreurs claires si config invalide
+- Auto-completion dans IDEs
+
+### Tests réussis
+```
+✓ Import from src.core.config
+✓ settings.redis_url is set
+✓ All configuration sections accessible
+✓ Computed properties working
+✓ get_summary() generation
+✓ get_settings() returns singleton
+✓ Validators (celery URLs default correctly)
+```
+
+### Blocages / Questions
+- Aucun blocage
+
+### Notes pour la prochaine session
+1. Feature #11 : Basic test structure (pytest.ini)
+2. Configuration pytest avec coverage
+3. Fixtures de base pour tests
+
+---
+
 ## Session 9 - 2025-12-30 - Feature #9: Logging configuration
 
 ### Ce qui a été fait
