@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 31,
+  "completed": 35,
   "features": [
     {
       "id": 1,
@@ -290,7 +290,7 @@
       "name": "DoclingExtractor OCR support",
       "description": "Enable OCR for scanned documents via EasyOCR or Tesseract",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Extract scanned_document.pdf returns readable text"
     },
@@ -299,7 +299,7 @@
       "name": "DoclingExtractor configuration options",
       "description": "Add configurable options: ocr_engine, table_structure, extract_images",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "DoclingExtractor(options={'ocr_engine': 'tesseract'}) works"
     },
@@ -308,7 +308,7 @@
       "name": "DoclingExtractor timing metrics",
       "description": "Track and return extraction_time in ExtractionResult",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 3,
       "verification": "ExtractionResult.extraction_time is set in seconds"
     },
@@ -317,7 +317,7 @@
       "name": "DoclingExtractor confidence scoring",
       "description": "Compute basic confidence score based on text density and structure detection",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 3,
       "verification": "confidence_score is between 0.0 and 1.0"
     },

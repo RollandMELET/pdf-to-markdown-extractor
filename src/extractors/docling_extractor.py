@@ -184,7 +184,7 @@ class DoclingExtractor(BaseExtractor):
         return {
             "tables": True,  # Implemented in Feature #20
             "images": True,  # Implemented in Feature #21
-            "ocr": False,  # Docling doesn't do OCR directly
+            "ocr": True,  # Implemented in Feature #32 (via Docling's built-in OCR)
             "formulas": True,  # Docling handles formulas well
             "multi_column": True,  # Docling handles multi-column layouts
             "metadata": True,  # Implemented in Feature #22

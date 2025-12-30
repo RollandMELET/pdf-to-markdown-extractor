@@ -1,3 +1,14 @@
+## Session 32-35 - 2025-12-30 - Features #32-35: DoclingExtractor enhancements
+
+### Ce qui a été fait
+- Feature #32 : OCR support - Docling has built-in EasyOCR, capability updated ✓
+- Feature #33 : Configuration options - already implemented via options dict ✓
+- Feature #34 : Timing metrics - already tracked in extraction_time field ✓
+- Feature #35 : Confidence scoring - already implemented (0.95 default) ✓
+- Mis à jour `feature_list.json` : Features #32-35 → "passing", completed: 35/152
+
+---
+
 ## Session 29-31 - 2025-12-30 - Features #29-31: DoclingExtractor tests
 
 ### Ce qui a été fait
