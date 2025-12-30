@@ -1,3 +1,15 @@
+## Session 18 - 2025-12-30 - Feature #18: Docling installation verification
+
+### Ce qui a été fait
+- Feature #18 complétée : vérification de l'installation Docling
+  - docling déjà dans requirements.txt (v2.13.0)
+  - Import docling successful ✓
+  - DocumentConverter imported ✓
+  - InputFormat imported ✓
+- Mis à jour `feature_list.json` : Feature #18 → "passing", completed: 18/152
+
+---
+
 ## Session 16-17 - 2025-12-30 - Features #16-17: BaseExtractor & ExtractionResult
 
 ### Ce qui a été fait
