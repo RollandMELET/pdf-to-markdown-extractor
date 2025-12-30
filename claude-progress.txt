@@ -1,3 +1,38 @@
+## Session 76-83 - 2025-12-30 - Features #76-83: Comparison system
+
+### Ce qui a été fait
+- Feature #76 : Comparator class skeleton ✓
+  - ExtractionComparator avec similarity_threshold configurable
+- Feature #77 : Text similarity calculation ✓
+  - text_similarity() avec difflib.SequenceMatcher
+  - Retourne ratio 0.0-1.0
+- Feature #78 : Block-level alignment ✓
+  - align_blocks() aligne paragraphes sémantiques
+  - Split par double newlines
+- Feature #79 : Table comparison ✓
+  - compare_tables() compare cellule par cellule
+  - Détecte mismatches structure et count
+- Feature #80 : Divergence detection ✓
+  - detect_divergences() identifie et classifie différences
+  - Types: TEXT_MISMATCH, TABLE_STRUCTURE, MISSING_BLOCK
+- Feature #81 : Divergence model ✓
+  - Divergence dataclass: id, type, page, block_id, content_a/b, similarity
+  - DivergenceType enum pour classification
+- Feature #82 : Similarity threshold configuration ✓
+  - Threshold configurable (défaut: 0.9)
+  - Utilisé pour flagging divergences
+- Feature #83 : Auto-merge high confidence blocks ✓
+  - should_auto_merge() check si similarity >= 0.95
+  - Auto-merge sans flagging pour haute similarité
+- Créé src/core/comparator.py (280 lignes)
+- Mis à jour `feature_list.json` : Features #76-83 → "passing", completed: 83/152
+
+### État actuel
+- **Features complétées** : 83/152 (54.61%)
+- **Prochaine feature** : #84 - Best extraction selection
+
+---
+
 ## Session 72-75 - 2025-12-30 - Features #72-75: Normalization
 
 ### Ce qui a été fait
