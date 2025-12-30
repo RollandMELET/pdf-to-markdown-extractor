@@ -2,13 +2,119 @@
 PDF-to-Markdown Extractor - Celery Tasks.
 
 Asynchronous tasks for PDF extraction, comparison, and processing.
-Full implementation in later features.
 """
+
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 from loguru import logger
 
-# Placeholder file for Celery task autodiscovery
-# Tasks will be implemented in Phase 2 onwards
-# This file prevents import errors during worker startup
+from src.core.celery_app import celery_app
+from src.core.orchestrator import Orchestrator
 
-logger.info("Tasks module loaded - ready for task definitions")
+
+@celery_app.task(
+    name="pdf_extractor.extract_pdf",
+    bind=True,
+    max_retries=3,
+    default_retry_delay=60,
+)
+def extract_pdf_task(
+    self,
+    file_path: str,
+    strategy: Optional[str] = None,
+    force_complexity: Optional[str] = None,
+    options: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """
+    Celery task for PDF extraction (Feature #64).
+
+    Wraps orchestrator.extract() for async processing via Celery.
+
+    Args:
+        self: Celery task instance (bound).
+        file_path: Path to PDF file as string.
+        strategy: Extraction strategy (fallback, parallel_local, etc.).
+        force_complexity: Force complexity level.
+        options: Extraction options.
+
+    Returns:
+        dict: Extraction result serialized as dict.
+
+    Example:
+        >>> result = extract_pdf_task.delay("/path/to/doc.pdf")
+        >>> result.get(timeout=600)
+        {'result': {...}, 'complexity': {...}}
+    """
+    logger.info(f"Celery task started: extract_pdf (file={file_path})")
+
+    try:
+        # Convert string path to Path object
+        pdf_path = Path(file_path)
+
+        # Create orchestrator
+        orchestrator = Orchestrator()
+
+        # Extract
+        extraction_result = orchestrator.extract(
+            file_path=pdf_path,
+            strategy=strategy,
+            force_complexity=force_complexity,
+            options=options,
+        )
+
+        # Serialize ExtractionResult for Celery
+        serialized = self._serialize_result(extraction_result)
+
+        logger.info(f"Celery task completed: extract_pdf (file={file_path})")
+
+        return serialized
+
+    except Exception as e:
+        logger.error(f"Celery task failed: extract_pdf (file={file_path}): {e}")
+
+        # Retry on failure
+        raise self.retry(exc=e)
+
+    def _serialize_result(self, extraction_result: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Serialize extraction result for Celery.
+
+        Args:
+            extraction_result: Result from orchestrator.extract().
+
+        Returns:
+            dict: Serialized result (JSON-compatible).
+        """
+        serialized = {
+            "complexity": extraction_result["complexity"],
+            "strategy_used": extraction_result["strategy_used"],
+        }
+
+        # Serialize main result
+        result = extraction_result["result"]
+        if result:
+            serialized["result"] = {
+                "markdown": result.markdown,
+                "metadata": result.metadata,
+                "confidence_score": result.confidence_score,
+                "extraction_time": result.extraction_time,
+                "extractor_name": result.extractor_name,
+                "success": result.success,
+                "table_count": len(result.tables),
+                "image_count": len(result.images),
+                "formula_count": len(result.formulas),
+            }
+
+        # Serialize aggregation if present (parallel strategies)
+        if "aggregation" in extraction_result:
+            serialized["aggregation"] = {
+                "extractor_count": extraction_result["aggregation"]["extractor_count"],
+                "successful_count": extraction_result["aggregation"]["successful_count"],
+                "average_confidence": extraction_result["aggregation"]["average_confidence"],
+            }
+
+        return serialized
+
+
+logger.info("Celery tasks module loaded")
