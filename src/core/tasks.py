@@ -10,6 +10,7 @@ from typing import Any, Dict, Optional
 from loguru import logger
 
 from src.core.celery_app import celery_app
+from src.core.job_tracker import JobTracker, JobStatus
 from src.core.orchestrator import Orchestrator
 
 
@@ -46,11 +47,24 @@ def extract_pdf_task(
         >>> result.get(timeout=600)
         {'result': {...}, 'complexity': {...}}
     """
-    logger.info(f"Celery task started: extract_pdf (file={file_path})")
+    job_id = self.request.id
+    tracker = JobTracker()
+
+    logger.info(f"Celery task started: extract_pdf (job_id={job_id}, file={file_path})")
+
+    # Feature #65: Set initial status
+    tracker.set_status(
+        job_id,
+        JobStatus.PENDING,
+        metadata={"file_path": file_path, "strategy": strategy}
+    )
 
     try:
         # Convert string path to Path object
         pdf_path = Path(file_path)
+
+        # Feature #65: Update status to extracting
+        tracker.set_status(job_id, JobStatus.EXTRACTING)
 
         # Create orchestrator
         orchestrator = Orchestrator()
@@ -63,15 +77,33 @@ def extract_pdf_task(
             options=options,
         )
 
+        # Feature #65: Update status if comparing (parallel extraction)
+        if "aggregation" in extraction_result:
+            tracker.set_status(job_id, JobStatus.COMPARING)
+
         # Serialize ExtractionResult for Celery
         serialized = self._serialize_result(extraction_result)
 
-        logger.info(f"Celery task completed: extract_pdf (file={file_path})")
+        # Feature #65: Update status to completed
+        tracker.set_status(
+            job_id,
+            JobStatus.COMPLETED,
+            metadata={"success": True, "confidence": serialized.get("result", {}).get("confidence_score")}
+        )
+
+        logger.info(f"Celery task completed: extract_pdf (job_id={job_id}, file={file_path})")
 
         return serialized
 
     except Exception as e:
-        logger.error(f"Celery task failed: extract_pdf (file={file_path}): {e}")
+        logger.error(f"Celery task failed: extract_pdf (job_id={job_id}, file={file_path}): {e}")
+
+        # Feature #65: Update status to failed
+        tracker.set_status(
+            job_id,
+            JobStatus.FAILED,
+            metadata={"error": str(e)}
+        )
 
         # Retry on failure
         raise self.retry(exc=e)
