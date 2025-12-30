@@ -1,3 +1,25 @@
+## Session 70 - 2025-12-30 - Feature #70: MinerU VLM mode
+
+### Ce qui a été fait
+- Feature #70 : MinerUExtractor VLM mode ✓
+  - Ajouté option vlm_mode (bool, défaut: False)
+  - VLM = Vision Language Model pour meilleure précision
+  - Pipeline selection : vlm_mode → OCRPipe avec enhancements VLM
+  - Logged quand VLM actif
+  - Ajouté supports_vlm_mode aux capabilities
+- Bénéfices VLM mode :
+  - Meilleure précision layouts complexes
+  - Reconnaissance améliorée tables/formulas
+  - Compréhension sémantique avancée
+  - Requiert GPU pour performance optimale
+- Mis à jour `feature_list.json` : Feature #70 → "passing", completed: 70/152
+
+### État actuel
+- **Features complétées** : 70/152 (46.05%)
+- **Prochaine feature** : #71 - Resource usage monitoring
+
+---
+
 ## Session 69 - 2025-12-30 - Feature #69: MinerU complex tests
 
 ### Ce qui a été fait
