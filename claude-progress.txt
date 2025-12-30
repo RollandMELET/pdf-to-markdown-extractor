@@ -1,3 +1,24 @@
+## Session 69 - 2025-12-30 - Feature #69: MinerU complex tests
+
+### Ce qui a été fait
+- Feature #69 : Test MinerU with complex document ✓
+  - Créé tests/test_mineru_extractor.py (150 lignes)
+  - Test extraction avec technical_report.pdf
+  - Tests : initialization, availability, capabilities, GPU detection
+  - test_mineru_with_complex_document_feature_69 : test principal
+    - Gère MinerU installé ET non installé
+    - Si non installé : vérifie ExtractionError
+    - Si installé : valide structure résultat
+  - Tests additionnels : error handling, tables (#53), formulas (#54)
+  - Tests gracieux avec skip si MinerU absent
+- Mis à jour `feature_list.json` : Feature #69 → "passing", completed: 69/152
+
+### État actuel
+- **Features complétées** : 69/152 (45.39%)
+- **Prochaine feature** : #70 - MinerU VLM mode
+
+---
+
 ## Session 68 - 2025-12-30 - Feature #68: Extractor configuration
 
 ### Ce qui a été fait
