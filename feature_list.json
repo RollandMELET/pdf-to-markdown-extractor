@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 66,
+  "completed": 67,
   "features": [
     {
       "id": 1,
@@ -605,7 +605,7 @@
       "name": "MinerU GPU detection",
       "description": "Detect if GPU is available and configure MinerU accordingly",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 3,
       "verification": "MinerU uses GPU when available, falls back to CPU"
     },

@@ -41,7 +41,9 @@ class MinerUExtractor(BaseExtractor):
     def __init__(self):
         """Initialize MinerU extractor."""
         self._mineru_available = None
+        self._gpu_available = None
         self._check_availability()
+        self._check_gpu()  # Feature #67
 
     def _check_availability(self) -> None:
         """Check if MinerU is installed and available."""
@@ -336,9 +338,42 @@ class MinerUExtractor(BaseExtractor):
 
         return metadata
 
+    def _check_gpu(self) -> None:
+        """
+        Check if GPU is available for MinerU (Feature #67).
+
+        Detects CUDA/GPU availability to configure MinerU pipeline.
+        """
+        try:
+            import torch
+
+            if torch.cuda.is_available():
+                self._gpu_available = True
+                gpu_name = torch.cuda.get_device_name(0)
+                logger.info(f"GPU detected for MinerU: {gpu_name}")
+            else:
+                self._gpu_available = False
+                logger.info("No GPU detected, MinerU will use CPU")
+
+        except ImportError:
+            self._gpu_available = False
+            logger.debug("PyTorch not available, cannot detect GPU")
+        except Exception as e:
+            self._gpu_available = False
+            logger.warning(f"GPU detection failed: {e}")
+
+    def has_gpu(self) -> bool:
+        """
+        Check if GPU is available (Feature #67).
+
+        Returns:
+            bool: True if GPU detected and available.
+        """
+        return self._gpu_available is True
+
     def get_capabilities(self) -> Dict[str, Any]:
         """
-        Get MinerU extractor capabilities.
+        Get MinerU extractor capabilities (Features #53-54, #67).
 
         Returns:
             dict: Capabilities dictionary.
@@ -351,6 +386,7 @@ class MinerUExtractor(BaseExtractor):
             "supports_images": True,
             "supports_ocr": True,
             "supports_complex_layouts": True,
+            "gpu_available": self.has_gpu(),  # Feature #67
             "precision": "high",
-            "speed": "medium",
+            "speed": "medium" if not self.has_gpu() else "fast",
         }
