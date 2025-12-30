@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 26,
+  "completed": 28,
   "features": [
     {
       "id": 1,
@@ -245,7 +245,7 @@
       "name": "Markdown output writer",
       "description": "Create src/utils/markdown_utils.py with write_markdown() that adds YAML frontmatter",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Output .md file has --- delimited frontmatter with metadata"
     },
@@ -254,7 +254,7 @@
       "name": "metadata.json writer",
       "description": "Create function to write metadata.json with full extraction details",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "metadata.json is valid JSON with document, extraction, content sections"
     },

@@ -7,7 +7,7 @@ Utilities for file and directory management.
 import shutil
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from loguru import logger
 
@@ -240,3 +240,50 @@ def copy_file_to_upload(
     logger.debug(f"Copied file: {source_path.name} -> {dest_path}")
 
     return dest_path
+
+
+def write_metadata_json(
+    result,
+    output_path: Path,
+    additional_data: Optional[Dict[str, Any]] = None,
+) -> Path:
+    """
+    Write extraction metadata to JSON file.
+
+    Args:
+        result: ExtractionResult object.
+        output_path: Path to output JSON file.
+        additional_data: Additional data to include in JSON.
+
+    Returns:
+        Path: Path to written JSON file.
+
+    Example:
+        >>> from src.extractors.base import ExtractionResult
+        >>> result = ExtractionResult(markdown="test", extractor_name="DoclingExtractor")
+        >>> json_path = write_metadata_json(result, Path("metadata.json"))
+        >>> import json
+        >>> with open(json_path) as f:
+        ...     data = json.load(f)
+        >>> print(data['extractor_name'])
+        DoclingExtractor
+    """
+    import json
+
+    # Get result as dict
+    metadata = result.to_dict()
+
+    # Add additional data
+    if additional_data:
+        metadata.update(additional_data)
+
+    # Ensure output directory exists
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Write JSON
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(metadata, f, indent=2, ensure_ascii=False)
+
+    logger.debug(f"Metadata written: {output_path}")
+
+    return output_path

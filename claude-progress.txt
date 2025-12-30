@@ -1,3 +1,18 @@
+## Session 27-28 - 2025-12-30 - Features #27-28: Markdown/metadata writers
+
+### Ce qui a été fait
+- Feature #27 : Markdown output writer
+  - Créé `src/utils/markdown_utils.py`
+  - write_markdown() avec YAML frontmatter
+  - Fonctions : strip_frontmatter(), clean_markdown(), format_table_markdown()
+- Feature #28 : metadata.json writer  
+  - Ajouté write_metadata_json() dans file_utils.py
+  - Sérialisation complète ExtractionResult → JSON
+- Tests : fichiers créés avec frontmatter et metadata ✓
+- Mis à jour `feature_list.json` : Features #27-28 → "passing", completed: 28/152
+
+---
+
 ## Session 26 - 2025-12-30 - Feature #26: Output directory management
 
 ### Ce qui a été fait
