@@ -1,5 +1,131 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 12 - 2025-12-30 - Feature #12: Test fixtures directory structure
+
+### Ce qui a été fait
+- Feature #12 complétée : organisation de la structure des fixtures de test
+  - Vérifié structure existante : tests/fixtures/ avec 4 sous-répertoires
+  - Créé README.md dans chaque sous-répertoire avec documentation complète
+  - Ajouté .gitkeep dans chaque répertoire pour maintenir la structure dans git
+  - Documentation des types de PDFs pour chaque catégorie
+  - Guidelines pour ajouter de nouveaux fichiers de test
+  - Exemples d'usage pour les tests
+  - Validation : structure de répertoires complète et documentée ✓
+- Mis à jour `feature_list.json` : Feature #12 → "passing", completed: 12/152
+
+### État actuel
+- **Features complétées** : 12/152 (7.89%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #13 - .gitignore file
+
+### Structure des fixtures
+```
+tests/fixtures/
+├── simple/          # PDFs simples (texte seul, 1-5 pages)
+│   ├── README.md
+│   └── .gitkeep
+├── medium/          # PDFs moyens (tableaux, multi-colonnes, 5-20 pages)
+│   ├── README.md
+│   └── .gitkeep
+├── complex/         # PDFs complexes (formules, scans OCR, 20+ pages)
+│   ├── README.md
+│   └── .gitkeep
+└── edge_cases/      # Cas limites (vides, corrompus, protégés, etc.)
+    ├── README.md
+    └── .gitkeep
+```
+
+### Catégories de fixtures
+
+**1. simple/** - PDFs basiques
+- Texte seul ou formatage minimal
+- Single column layout
+- Pas ou peu de tableaux (2-3 colonnes max)
+- Pas d'images
+- 1-5 pages
+- **Usage** : Tests d'extraction basique, détection paragraphes
+
+**2. medium/** - PDFs de complexité moyenne
+- Contenu mixte : texte, tableaux, listes
+- Multi-colonnes (2-3 colonnes)
+- Tableaux modérés (3-10 colonnes)
+- Quelques images/diagrammes
+- Headers/footers avec numérotation
+- 5-20 pages
+- **Usage** : Tests multi-colonnes, extraction tableaux, gestion images
+
+**3. complex/** - PDFs complexes
+- Contenu hautement structuré
+- Multi-colonnes (3+ colonnes, largeurs variables)
+- Tableaux complexes (10+ colonnes, nested tables)
+- Nombreuses images, diagrammes, graphiques
+- Formules mathématiques
+- Pages scannées (OCR requis)
+- 20+ pages
+- **Usage** : Tests OCR, formules, performance documents lourds
+
+**4. edge_cases/** - Cas limites
+- PDFs vides (0 pages ou blank)
+- PDFs corrompus ou malformés
+- PDFs protégés par mot de passe
+- Encodages inhabituels
+- Tailles non-standard (A0, custom)
+- Images seulement (pas de texte)
+- Texte RTL (arabe, hébreu)
+- Fichiers très larges (100+ pages)
+- Formulaires avec champs interactifs
+- **Usage** : Tests robustesse, gestion erreurs, cas limites
+
+### Documentation README
+
+Chaque README contient :
+- ✅ Caractéristiques du type de PDF
+- ✅ Objectif des tests
+- ✅ Exemples de PDFs adaptés
+- ✅ Exemples de code d'usage
+- ✅ Guidelines pour ajouter nouveaux fichiers
+- ✅ Notes spéciales (performance, marqueurs pytest, etc.)
+
+### Usage dans les tests
+
+```python
+# Utilisation des fixtures paths (définis dans conftest.py)
+def test_simple_extraction(simple_pdf_path):
+    pdf_file = simple_pdf_path / "example.pdf"
+    result = extract_pdf(pdf_file)
+    assert result.success
+
+def test_complex_with_ocr(complex_pdf_path):
+    pdf_file = complex_pdf_path / "scanned_document.pdf"
+    result = extract_with_ocr(pdf_file)
+    assert "text_detected" in result
+
+@pytest.mark.slow
+def test_large_document(edge_case_pdf_path):
+    pdf_file = edge_case_pdf_path / "huge_500_pages.pdf"
+    result = extract_pdf(pdf_file)
+    assert result.page_count == 500
+```
+
+### Tests réussis
+```
+✓ Directory structure exists (4 subdirectories)
+✓ README.md in each subdirectory
+✓ .gitkeep in each subdirectory for git tracking
+✓ Documentation complete and comprehensive
+```
+
+### Blocages / Questions
+- Aucun blocage
+- PDFs réels seront ajoutés progressivement lors de l'implémentation
+
+### Notes pour la prochaine session
+1. Feature #13 : .gitignore file
+2. Les fichiers PDF réels seront ajoutés au besoin lors des phases 2-3
+3. Structure maintenant prête pour recevoir les fixtures de test
+
+---
+
 ## Session 11 - 2025-12-30 - Feature #11: pytest configuration
 
 ### Ce qui a été fait
