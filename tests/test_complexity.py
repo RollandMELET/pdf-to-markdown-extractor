@@ -241,21 +241,16 @@ class TestComplexityClassification:
         assert result.complexity_level in ["medium", "complex"]
 
     @pytest.mark.requires_pdf
-    @pytest.mark.skip(reason="Complex PDF fixture (technical_report.pdf) not yet created")
     def test_complex_classification_feature_47(self, analyzer):
         """
         Feature #47: Test that technical_report.pdf is classified as complex.
 
         Verification: pytest test_complexity.py::test_complex_classification passes
 
-        Note: This test is skipped until a complex PDF fixture is created.
         A technical report with:
-        - 20+ pages (10 points)
-        - Multiple tables (25 points)
-        - Multi-column layout (25 points)
-        - Images/diagrams (20 points)
-        - Formulas (30 points)
-        Total: 110+ points → complex
+        - 25 pages (10 points) - multi-column layout (25 points)
+        - Formulas (15 points)
+        Total: 50+ points → complex
         """
         pdf_path = Path("tests/fixtures/complex/technical_report.pdf")
 

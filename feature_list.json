@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 54,
+  "completed": 55,
   "features": [
     {
       "id": 1,
@@ -425,7 +425,7 @@
       "name": "Test complexity complex document",
       "description": "Test that technical_report.pdf is classified as complex",
       "category": "Phase 3 - \u00c9valuation complexit\u00e9",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "pytest test_complexity.py::test_complex_classification passes"
     },
