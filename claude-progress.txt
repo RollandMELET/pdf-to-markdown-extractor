@@ -1,5 +1,16 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 14 - 2025-12-30 - Feature #14: init.sh script enhancement
+
+### Ce qui a été fait
+- Feature #14 complétée : enrichissement du script init.sh
+  - Ajout option `--start-services` pour démarrer docker-compose
+  - Health checks : Redis (redis-cli ping), API (curl /health), Worker (celery inspect ping)
+  - Tous les health checks passent ✓
+- Mis à jour `feature_list.json` : Feature #14 → "passing", completed: 14/152
+
+---
+
 ## Session 13 - 2025-12-30 - Feature #13: Sample PDF fixtures
 
 ### Ce qui a été fait

@@ -100,6 +100,67 @@ echo "6. Mettre à jour claude-progress.txt"
 echo ""
 echo "⚠️  UNE FEATURE PAR SESSION - Ne pas paralléliser!"
 echo ""
+# 8. Start services (optional)
+if [ "$1" = "--start-services" ]; then
+    echo "=========================================="
+    echo "  🚀 Démarrage des services"
+    echo "=========================================="
+    echo ""
+
+    if [ -f "docker-compose.yml" ]; then
+        echo "📦 Démarrage docker-compose..."
+        docker-compose up -d
+        echo ""
+
+        echo "⏳ Attente des services (5s)..."
+        sleep 5
+        echo ""
+
+        echo "📊 État des services:"
+        docker-compose ps
+        echo ""
+
+        # 9. Health check
+        echo "=========================================="
+        echo "  🏥 Health Check"
+        echo "=========================================="
+        echo ""
+
+        # Check Redis
+        echo "🔍 Redis:"
+        if docker-compose exec -T redis redis-cli ping &> /dev/null; then
+            echo "  ✅ Redis is healthy"
+        else
+            echo "  ❌ Redis health check failed"
+        fi
+
+        # Check API
+        echo "🔍 API:"
+        if curl -sf http://localhost:8000/health &> /dev/null; then
+            echo "  ✅ API is healthy"
+        else
+            echo "  ⚠️  API not reachable (might still be starting)"
+        fi
+
+        # Check Worker
+        echo "🔍 Worker:"
+        if docker-compose exec -T worker celery -A src.core.celery_app inspect ping &> /dev/null; then
+            echo "  ✅ Worker is healthy"
+        else
+            echo "  ⚠️  Worker not reachable"
+        fi
+
+        echo ""
+    else
+        echo "❌ docker-compose.yml non trouvé"
+    fi
+fi
+
 echo "=========================================="
 echo "  ✅ Initialisation terminée"
 echo "=========================================="
+echo ""
+if [ "$1" != "--start-services" ]; then
+    echo "💡 Astuce: Utilisez './init.sh --start-services' pour démarrer les services"
+    echo ""
+fi
