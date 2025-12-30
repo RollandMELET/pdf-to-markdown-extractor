@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 35,
+  "completed": 42,
   "features": [
     {
       "id": 1,
@@ -326,7 +326,7 @@
       "name": "ComplexityAnalyzer class",
       "description": "Create src/core/complexity.py with ComplexityAnalyzer class",
       "category": "Phase 3 - Évaluation complexité",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "ComplexityAnalyzer can be instantiated"
     },
@@ -335,7 +335,7 @@
       "name": "Page count scoring",
       "description": "Implement page_count_score(): 1-5 pages=0, 6-20=5, 21-50=10",
       "category": "Phase 3 - Évaluation complexité",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "page_count_score(25) returns 10"
     },
@@ -344,7 +344,7 @@
       "name": "Table detection scoring",
       "description": "Implement table_score() using layout analysis: 0 tables=0, 1-3=10, 4+=25",
       "category": "Phase 3 - Évaluation complexité",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "table_score(5) returns 25"
     },
@@ -353,7 +353,7 @@
       "name": "Multi-column detection",
       "description": "Implement column_score() detecting 2+ column layouts",
       "category": "Phase 3 - Évaluation complexité",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "column_score() returns 20 for multi-column PDF"
     },
@@ -362,7 +362,7 @@
       "name": "Image density scoring",
       "description": "Implement image_score() based on images/page ratio",
       "category": "Phase 3 - Évaluation complexité",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "image_score() returns 15 for PDF with many diagrams"
     },
@@ -371,7 +371,7 @@
       "name": "Formula detection scoring",
       "description": "Implement formula_score() detecting LaTeX/MathML patterns",
       "category": "Phase 3 - Évaluation complexité",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "formula_score() returns 15 for PDF with equations"
     },
@@ -380,7 +380,7 @@
       "name": "Scan detection scoring",
       "description": "Implement scan_score() detecting if document is scanned (low text extractability)",
       "category": "Phase 3 - Évaluation complexité",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "scan_score() returns 15 for scanned_document.pdf"
     },

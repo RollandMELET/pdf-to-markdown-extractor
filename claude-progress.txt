@@ -1,3 +1,19 @@
+## Session 36-42 - 2025-12-30 - Features #36-42: ComplexityAnalyzer
+
+### Ce qui a été fait
+- Créé `src/core/complexity.py` avec ComplexityAnalyzer et ComplexityScore
+- Feature #36 : ComplexityAnalyzer class avec méthode analyze() ✓
+- Feature #37 : page_count_score() - 1-5p=0, 6-20p=5, 21-50p=10, 51+p=15 ✓
+- Feature #38 : table_score() - 0 tables=0, 1-3=10, 4+=25 ✓
+- Feature #39 : column_score() - single=0, 2col=15, 3+col=25 ✓
+- Feature #40 : image_score() - basé sur images/page ratio ✓
+- Feature #41 : formula_score() - détection LaTeX/MathML patterns ✓
+- Feature #42 : scan_score() - détection documents scannés ✓
+- Tests : text_only=simple(0), simple_table=medium(15), multi_column=medium(25) ✓
+- Mis à jour `feature_list.json` : Features #36-42 → "passing", completed: 42/152
+
+---
+
 ## Session 32-35 - 2025-12-30 - Features #32-35: DoclingExtractor enhancements
 
 ### Ce qui a été fait
