@@ -1,3 +1,26 @@
+## Session 66 - 2025-12-30 - Feature #66: Progress percentage
+
+### Ce qui a été fait
+- Feature #66 : Progress percentage calculation ✓
+  - Ajouté paramètre progress_percentage à JobTracker.set_status()
+  - Progression stockée dans Redis avec job status
+  - Clamped 0-100 range
+  - Jalons de progression dans tâche Celery :
+    - 0% : PENDING (job en queue)
+    - 25% : EXTRACTING (extraction démarrée)
+    - 75% : COMPARING (comparaison - parallel seulement)
+    - 100% : COMPLETED (job terminé)
+  - Disponible via get_status() API
+  - Loggé avec mises à jour de status
+- Mis à jour `feature_list.json` : Feature #66 → "passing", completed: 66/152
+
+### État actuel
+- **Features complétées** : 66/152 (43.42%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79)
+- **Prochaine feature** : #67 - MinerU GPU detection
+
+---
+
 ## Session 65 - 2025-12-30 - Feature #65: Job status tracking
 
 ### Ce qui a été fait
