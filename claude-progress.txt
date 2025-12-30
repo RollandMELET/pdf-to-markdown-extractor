@@ -1,3 +1,29 @@
+## Session 56 - 2025-12-30 - Feature #56: ExtractorRegistry
+
+### Ce qui a été fait
+- Feature #56 : ExtractorRegistry pattern ✓
+  - Créé src/core/registry.py avec classe ExtractorRegistry (180 lignes)
+  - Auto-découverte des extracteurs disponibles
+  - Méthode get_available() retourne liste d'extracteurs (vérification feature)
+  - Méthodes : get(name), get_names(), has_extractor(), get_capabilities(), count()
+  - Normalisation des clés (docling, mineru au lieu de DoclingExtractor)
+- Mis à jour Orchestrator pour utiliser ExtractorRegistry :
+  - Supprimé _register_extractors() manuelle
+  - Utilise registry.get() au lieu de self.extractors dict
+  - Meilleure séparation des responsabilités
+- Bénéfices :
+  - Gestion centralisée des extracteurs
+  - Découverte automatique
+  - Facile d'ajouter nouveaux extracteurs
+- Mis à jour `feature_list.json` : Feature #56 → "passing", completed: 56/152
+
+### État actuel
+- **Features complétées** : 56/152 (36.84%)
+- **Phase actuelle** : Phase 2 - Extracteurs (Features 16-56)
+- **Prochaine feature** : #57 - Parallel extraction executor
+
+---
+
 ## Session 47 - 2025-12-30 - Feature #47: Complex PDF fixture
 
 ### Ce qui a été fait
