@@ -1,3 +1,27 @@
+## Session 59 - 2025-12-30 - Feature #59: ExtractionAggregator
+
+### Ce qui a été fait
+- Feature #59 : Extraction result aggregator ✓
+  - Créé src/core/aggregator.py avec classe ExtractionAggregator (210 lignes)
+  - Méthode aggregate() collecte résultats de plusieurs extracteurs
+  - Retourne summary complet : counts, metrics, best_result, consensus
+  - Méthode get_divergences() détecte différences significatives (>20%)
+  - Sélection du meilleur résultat (highest confidence)
+  - Structure pour arbitrage humain future
+- Métriques calculées :
+  - extractor_count, successful_count, failed_count
+  - Per-extractor: success, confidence, time, char_count
+  - average_confidence, total_extraction_time
+  - consensus_available (2+ extracteurs réussis)
+- Mis à jour `feature_list.json` : Feature #59 → "passing", completed: 59/152
+
+### État actuel
+- **Features complétées** : 59/152 (38.82%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79)
+- **Prochaine feature** : #60 - Memory management for parallel extraction
+
+---
+
 ## Session 57-58 - 2025-12-30 - Features #57-58: ParallelExecutor
 
 ### Ce qui a été fait
