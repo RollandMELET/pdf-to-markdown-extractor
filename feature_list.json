@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 83,
+  "completed": 88,
   "features": [
     {
       "id": 1,
@@ -758,7 +758,7 @@
       "name": "Best extraction selection",
       "description": "When extractions differ, select one based on confidence scores",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "select_best() returns extractor with higher confidence for block"
     },
@@ -767,7 +767,7 @@
       "name": "Merge strategy options",
       "description": "Implement merge strategies: prefer_docling, prefer_mineru, highest_confidence",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Merge respects configured strategy"
     },
@@ -776,7 +776,7 @@
       "name": "Merged document generator",
       "description": "Generate final markdown by merging best blocks from each extraction",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "merge() returns complete markdown document"
     },
@@ -785,7 +785,7 @@
       "name": "Needs review status",
       "description": "Set job status to needs_review when divergences exceed threshold",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Job with divergences has status needs_review"
     },
@@ -794,7 +794,7 @@
       "name": "Streamlit app skeleton",
       "description": "Create src/arbitration/streamlit_app.py with basic layout",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "streamlit run streamlit_app.py shows basic UI"
     },
