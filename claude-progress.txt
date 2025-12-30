@@ -1,3 +1,31 @@
+## Session 64 - 2025-12-30 - Feature #64: Celery extraction task
+
+### Ce qui a été fait
+- Feature #64 : Celery task for extraction ✓
+  - Créé extract_pdf_task() dans src/core/tasks.py
+  - Wrap orchestrator.extract() pour traitement async via Celery
+  - Accepte: file_path, strategy, force_complexity, options
+  - Retourne résultat sérialisé (JSON-compatible)
+  - Configuration task: bind=True, max_retries=3, retry_delay=60s
+- Fonctionnalités :
+  - Retry automatique sur échec (3 tentatives)
+  - Sérialisation pour stockage Celery/Redis
+  - Gère extraction simple ET parallèle
+  - Logs start/complete/failure
+  - Sérialise: result, complexity, aggregation
+- Usage :
+  - Async: extract_pdf_task.delay(pdf_path)
+  - Sync: extract_pdf_task(pdf_path)
+  - With timeout: result.get(timeout=600)
+- Mis à jour `feature_list.json` : Feature #64 → "passing", completed: 64/152
+
+### État actuel
+- **Features complétées** : 64/152 (42.11%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79)
+- **Prochaine feature** : #65 - Job status tracking
+
+---
+
 ## Session 62-63 - 2025-12-30 - Features #62-63: Parallel extraction tests
 
 ### Ce qui a été fait
