@@ -1,5 +1,73 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 5 - 2025-12-30 - Feature #4: docker-compose.yml base setup
+
+### Ce qui a été fait
+- Feature #4 complétée : création de docker-compose.yml avec orchestration complète
+  - 3 services configurés : api (FastAPI), worker (Celery), redis (Queue & Cache)
+  - Service streamlit (optionnel, profil "with-ui")
+  - Networks : pdf-extractor-network (bridge)
+  - Volumes : redis_data (persistance), data/{uploads,outputs,cache}, config/
+  - Health checks configurés : redis (redis-cli ping), api (HTTP /health)
+  - Resource limits : worker limité à 8GB RAM
+  - Validation : `docker-compose up -d` → SUCCESS, tous les services démarrent ✓
+- Créé fichiers stubs pour permettre les tests :
+  - `src/core/celery_app.py` : Celery app minimal avec task health_check
+  - `src/arbitration/streamlit_app.py` : Interface Streamlit placeholder
+  - `.env.example` : Template des variables d'environnement
+- Créé répertoires data/ et config/ avec .gitkeep
+- Mis à jour `feature_list.json` : Feature #4 → "passing", completed: 4/152
+
+### État actuel
+- **Features complétées** : 4/152 (2.63%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #5 - .env.example file (déjà créée !) → Feature #6
+
+### docker-compose.yml caractéristiques
+**Services** :
+- `api` : FastAPI sur port 8000 (configurable via API_PORT)
+- `worker` : Celery avec concurrency=2, limite 8GB RAM
+- `redis` : Redis 7-alpine avec persistance, maxmemory 1GB
+- `streamlit` : Interface arbitrage (profile: with-ui)
+
+**Volumes** :
+- `./data/uploads` → /app/data/uploads
+- `./data/outputs` → /app/data/outputs
+- `./data/cache` → /app/data/cache
+- `./config` → /app/config
+- `redis_data` : volume nommé pour Redis AOF
+
+**Configuration** :
+- Environment vars chargées depuis .env (API_PORT, LOG_LEVEL, MISTRAL_API_KEY, etc.)
+- Service dependencies : api et worker attendent redis healthy
+- Restart policy : unless-stopped (production-ready)
+
+### Tests réussis
+```
+✓ docker-compose up -d : tous les services démarrent
+✓ redis : healthy (redis-cli ping)
+✓ api : up, répond sur /health et / (testé sur port 8888)
+✓ worker : ready, connecté à redis://redis:6379/0
+✓ Network créé : pdf-extractor-network
+✓ Volume créé : redis_data
+```
+
+### Note technique
+- Port 8000 local conflit avec MCP server → testé sur 8888
+- Healthcheck API utilise curl (non installé) → à améliorer dans feature future
+- Warning docker-compose : "version obsolete" → à retirer
+
+### Blocages / Questions
+- Aucun blocage
+
+### Notes pour la prochaine session
+1. Feature #5 déjà complétée (.env.example créé dans cette session)
+2. Prochaine : Feature #6 - pytest.ini and test configuration
+3. Considérer : retirer "version: '3.8'" de docker-compose.yml (warning)
+4. Considérer : améliorer healthcheck API (utiliser Python au lieu de curl)
+
+---
+
 ## Session 4 - 2025-12-30 - Feature #3: Dockerfile for API service
 
 ### Ce qui a été fait
