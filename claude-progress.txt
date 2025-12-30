@@ -1,5 +1,55 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 2 - 2025-12-30 - Feature #1: Project structure initialization
+
+### Ce qui a été fait
+- Feature #1 complétée : création de la structure de répertoires du projet
+  - Créé `src/` avec sous-dossiers : api/, core/, extractors/, arbitration/, utils/
+  - Créé `tests/` avec sous-dossiers fixtures/ (simple, medium, complex, edge_cases)
+  - Créé `docs/` et `scripts/` (vides pour l'instant)
+  - Ajouté tous les fichiers `__init__.py` nécessaires (9 fichiers)
+- Mis à jour `feature_list.json` : status "passing", completed: 1/152
+- Rendu `init.sh` exécutable (chmod +x)
+- Repository connecté à GitHub et synchronisé
+
+### État actuel
+- **Features complétées** : 1/152 (0.66%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #2 - Requirements.txt with pinned versions
+
+### Structure créée
+```
+src/
+├── __init__.py
+├── api/
+│   ├── __init__.py
+│   ├── routes/__init__.py
+│   └── models/__init__.py
+├── core/__init__.py
+├── extractors/__init__.py
+├── arbitration/__init__.py
+└── utils/__init__.py
+tests/
+├── __init__.py
+└── fixtures/
+    ├── simple/
+    ├── medium/
+    ├── complex/
+    └── edge_cases/
+docs/
+scripts/
+```
+
+### Blocages / Questions
+- Aucun blocage
+
+### Notes pour la prochaine session
+1. Feature #2 : créer requirements.txt avec toutes les dépendances
+2. Attention aux versions : Python 3.11+ requis, définir les versions exactes
+3. Vérifier compatibilité des dépendances entre elles
+
+---
+
 ## Session 1 - 2025-12-30 - Initialisation du projet
 
 ### Ce qui a été fait
