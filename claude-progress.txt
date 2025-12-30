@@ -1,3 +1,30 @@
+## Session 62-63 - 2025-12-30 - Features #62-63: Parallel extraction tests
+
+### Ce qui a été fait
+- Feature #62 : Test parallel extraction ✓
+  - Créé tests/test_parallel_extraction.py (190 lignes)
+  - Test que parallel extraction retourne résultats des deux extracteurs
+  - Mock Docling et MinerU extractors
+  - Vérifie ParallelExecutor.execute() retourne dict avec les deux
+  - Validation exécution concurrente
+- Feature #63 : Test extractor fallback ✓
+  - Test qu'un extracteur échoué ne bloque pas les autres
+  - Un extracteur réussit, l'autre raise ExtractionError
+  - Vérifie que seul le résultat réussi est retourné
+  - Gestion gracieuse des échecs partiels
+- Tests créés :
+  - TestParallelExecution : init, parallel execution
+  - TestExtractionAggregator : aggregation, empty results
+  - TestOrchestratorParallel : intégration avec ExtractorRegistry
+- Mis à jour `feature_list.json` : Features #62-63 → "passing", completed: 63/152
+
+### État actuel
+- **Features complétées** : 63/152 (41.45%)
+- **Phase actuelle** : Phase 3 - Orchestration (Features 57-79)
+- **Prochaine feature** : #64 - Celery task for extraction
+
+---
+
 ## Session 61 - 2025-12-30 - Feature #61: Orchestrator parallel pipeline
 
 ### Ce qui a été fait
