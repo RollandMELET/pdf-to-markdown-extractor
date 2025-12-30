@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 56,
+  "completed": 58,
   "features": [
     {
       "id": 1,
@@ -515,7 +515,7 @@
       "name": "Parallel extraction executor",
       "description": "Create executor that runs multiple extractors in parallel using ThreadPoolExecutor",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "extract_parallel(['docling', 'mineru'], pdf) returns both results"
     },
@@ -524,7 +524,7 @@
       "name": "Extraction timeout handling",
       "description": "Add configurable timeout per extractor, cancel if exceeded",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Extractor exceeding timeout raises TimeoutError"
     },
