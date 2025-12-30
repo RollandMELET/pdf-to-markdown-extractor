@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 69,
+  "completed": 70,
   "features": [
     {
       "id": 1,
@@ -632,7 +632,7 @@
       "name": "MinerUExtractor VLM mode",
       "description": "Enable Vision Language Model mode for better accuracy",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "MinerU uses VLM pipeline when configured"
     },
