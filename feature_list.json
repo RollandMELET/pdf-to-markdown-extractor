@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 18,
+  "completed": 19,
   "features": [
     {
       "id": 1,
@@ -173,7 +173,7 @@
       "name": "DoclingExtractor basic implementation",
       "description": "Create src/extractors/docling_extractor.py implementing BaseExtractor with basic text extraction",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "DoclingExtractor().extract('test.pdf') returns ExtractionResult with markdown"
     },

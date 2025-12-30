@@ -51,7 +51,8 @@ WORKDIR /app
 
 # Copy application code
 COPY src/ /app/src/
-COPY README.md SPEC.md /app/
+COPY tests/ /app/tests/
+COPY README.md SPEC.md pytest.ini /app/
 
 # Create necessary directories
 RUN mkdir -p /app/data/uploads /app/data/outputs /app/data/cache && \

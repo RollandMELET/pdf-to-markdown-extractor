@@ -1,3 +1,20 @@
+## Session 19 - 2025-12-30 - Feature #19: DoclingExtractor basic implementation
+
+### Ce qui a été fait
+- Feature #19 complétée : implémentation basique de DoclingExtractor
+  - Créé `src/extractors/docling_extractor.py` avec classe DoclingExtractor
+  - Hérite de BaseExtractor
+  - Méthode extract() avec DocumentConverter
+  - Méthode is_available() vérifie import docling
+  - Méthode get_capabilities() retourne capacités
+  - Gestion d'erreurs avec try/catch
+  - Logging avec loguru
+  - Test extraction text_only.pdf : SUCCESS (437 chars, 20s)
+  - Mis à jour Dockerfile pour copier tests/ dans container
+- Mis à jour `feature_list.json` : Feature #19 → "passing", completed: 19/152
+
+---
+
 ## Session 18 - 2025-12-30 - Feature #18: Docling installation verification
 
 ### Ce qui a été fait
