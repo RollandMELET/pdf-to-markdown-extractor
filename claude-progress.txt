@@ -1,5 +1,141 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 11 - 2025-12-30 - Feature #11: pytest configuration
+
+### Ce qui a été fait
+- Feature #11 complétée : configuration pytest avec fixtures
+  - Créé `pytest.ini` avec configuration complète
+  - Configuration pytest : patterns de découverte, options strictes, logging
+  - Markers personnalisés : unit, integration, e2e, smoke, slow, extractor, api, celery, etc.
+  - Logging : fichier pytest.log + console formatée
+  - Créé `tests/conftest.py` avec fixtures globales
+  - Fixtures temporaires : temp_dir, upload_dir, output_dir, cache_dir
+  - Fixtures configuration : test_settings
+  - Fixtures FastAPI : client (sync), async_client (async)
+  - Fixtures Redis : redis_client avec cleanup automatique
+  - Fixtures PDF : simple_pdf_path, medium_pdf_path, complex_pdf_path, edge_case_pdf_path
+  - Fixtures mocks : mock_mistral_api
+  - Fixtures logging : caplog_debug
+  - Auto-marking des tests selon localisation/nom de fichier
+  - Créé `tests/test_config.py` avec 19 tests pour Settings class
+  - Validation : pytest exécute et découvre les tests ✓
+  - Tous les tests passent (19/19) ✓
+- Mis à jour `feature_list.json` : Feature #11 → "passing", completed: 11/152
+
+### État actuel
+- **Features complétées** : 11/152 (7.24%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #12 - Git repository initialization
+
+### pytest.ini caractéristiques
+**Configuration** :
+- Test discovery : `test_*.py`, `*_test.py`, `Test*`, `test_*`
+- Test paths : `tests/`
+- Python path : `.` (inclut src)
+- Options : verbose, strict-markers, strict-config, durations
+- Coverage : désactivée par défaut (à activer au besoin)
+
+**Markers disponibles** :
+- `unit` : Tests unitaires (rapides, isolés)
+- `integration` : Tests d'intégration (plusieurs composants)
+- `e2e` : Tests end-to-end (workflow complet)
+- `smoke` : Tests de smoke (vérifications rapides)
+- `slow` : Tests lents
+- `requires_redis` : Nécessite Redis
+- `requires_api` : Nécessite API
+- `requires_pdf` : Nécessite fixtures PDF
+- `extractor` : Tests extracteurs
+- `api` : Tests API
+- `celery` : Tests Celery
+- `config` : Tests configuration
+
+**Logging** :
+- Console : niveau INFO, format avec timestamp
+- Fichier : `logs/pytest.log`, niveau DEBUG
+
+### conftest.py fixtures
+**Environnement** :
+- `setup_test_environment` : Configure env vars pour tests (session scope)
+
+**Directories** :
+- `temp_dir` : Répertoire temporaire auto-nettoyé
+- `upload_dir`, `output_dir`, `cache_dir` : Répertoires spécialisés
+
+**Configuration** :
+- `test_settings` : Instance Settings pour tests
+
+**API** :
+- `client` : TestClient FastAPI synchrone
+- `async_client` : AsyncClient pour tests async
+
+**Redis** :
+- `redis_client` : Client Redis avec flush automatique après test
+
+**PDF Fixtures** :
+- `simple_pdf_path`, `medium_pdf_path`, `complex_pdf_path`, `edge_case_pdf_path`
+
+**Mocks** :
+- `mock_mistral_api` : Mock Mistral API
+
+**Logging** :
+- `caplog_debug` : Capture logs niveau DEBUG
+
+**Auto-cleanup** :
+- `cleanup_after_test` : Nettoyage automatique après chaque test
+
+**Auto-marking** :
+- Tests marqués automatiquement selon localisation fichier
+- `test_api*.py` → marker `api`
+- `test_extractor*.py` → marker `extractor`
+- `test_celery*.py` → marker `celery`
+
+### test_config.py tests
+**19 tests créés** :
+```
+✓ test_settings_instance
+✓ test_get_settings_returns_singleton
+✓ test_redis_url_is_set
+✓ test_default_values
+✓ test_computed_property_max_file_size_bytes
+✓ test_computed_property_is_production
+✓ test_computed_property_is_development
+✓ test_get_summary
+✓ test_mask_url_with_credentials
+✓ test_mask_url_without_credentials
+✓ test_celery_broker_url_defaults_to_redis_url
+✓ test_celery_result_backend_defaults_to_redis_url
+✓ test_log_level_uppercase_validator
+✓ test_extraction_strategy_values
+✓ test_similarity_threshold_range
+✓ test_cors_origins_is_list
+✓ test_storage_paths_are_path_objects
+✓ test_reload_settings
+✓ test_ensure_directories
+```
+
+**Résultat** : 19 passed in 0.03s
+
+### Tests réussis
+```
+✓ pytest discovers tests
+✓ pytest runs successfully
+✓ All 19 tests pass
+✓ Markers work correctly
+✓ Fixtures load properly
+✓ Configuration validates correctly
+```
+
+### Blocages / Questions
+- Coverage désactivée par défaut (pytest-cov génère warnings)
+- Timeout désactivé par défaut (pytest-timeout non requis pour l'instant)
+
+### Notes pour la prochaine session
+1. Feature #12 : Git repository initialization
+2. Potentiellement activer coverage plus tard si besoin
+3. Ajouter plus de tests au fur et à mesure de l'implémentation
+
+---
+
 ## Session 10 - 2025-12-30 - Feature #10: Config management with Pydantic Settings
 
 ### Ce qui a été fait
