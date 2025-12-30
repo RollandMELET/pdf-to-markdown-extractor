@@ -1,5 +1,68 @@
 # PDF-to-Markdown Extractor - Progress Log
 
+## Session 6 - 2025-12-30 - Features #5 & #6: .env.example + FastAPI skeleton
+
+### Ce qui a été fait
+- Feature #5 complétée : .env.example déjà créé en Session 5, statut mis à jour → "passing"
+- Feature #6 complétée : enrichissement du FastAPI skeleton
+  - Ajout CORS middleware (allow_origins=*, credentials, methods, headers)
+  - Ajout lifespan manager (startup/shutdown events avec logging)
+  - Import loguru pour logging structuré
+  - Import os pour variables d'environnement
+  - Amélioration endpoint / : inclut links vers /docs et /health
+  - Amélioration endpoint /health : statut "healthy" au lieu de "ok"
+  - Configuration explicite des URLs OpenAPI (/docs, /redoc, /openapi.json)
+  - Validation : docker-compose build + test → SUCCESS ✓
+- Mis à jour `feature_list.json` : Features #5 et #6 → "passing", completed: 6/152
+
+### État actuel
+- **Features complétées** : 6/152 (3.95%)
+- **Phase actuelle** : Phase 1 - Infrastructure (Features 1-15)
+- **Prochaine feature** : #7 - Celery app configuration (déjà créée !) → Feature #8
+
+### FastAPI skeleton caractéristiques
+**Middleware** :
+- CORS : allow_origins=* (à configurer en production)
+- Credentials : true
+- Methods : * (GET, POST, PUT, DELETE, etc.)
+- Headers : *
+
+**Lifecycle** :
+- Startup event : logs "Starting PDF-to-Markdown Extractor API"
+- Logs environment (LOG_LEVEL)
+- Shutdown event : logs "Shutting down"
+
+**Endpoints** :
+- `GET /` : Informations API avec links
+- `GET /health` : Health check (status: healthy)
+- `GET /docs` : Swagger UI (auto-généré)
+- `GET /redoc` : ReDoc UI (auto-généré)
+- `GET /openapi.json` : OpenAPI spec
+
+### Tests réussis
+```
+✓ docker-compose build api : image reconstruite
+✓ docker-compose up -d : services démarrent
+✓ GET / : retourne informations API avec links
+✓ GET /health : retourne {status: "healthy"}
+✓ OPTIONS /health : CORS headers présents
+  - access-control-allow-origin: http://example.com
+  - access-control-allow-methods: DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT
+  - access-control-allow-credentials: true
+✓ Logs startup : "Starting PDF-to-Markdown Extractor API"
+✓ Environment LOG_LEVEL : INFO
+```
+
+### Blocages / Questions
+- Aucun blocage
+
+### Notes pour la prochaine session
+1. Feature #7 "Celery app configuration" déjà créée (src/core/celery_app.py existe)
+2. Prochaine réelle : Feature #8 - Basic test structure
+3. Considérer : améliorer celery_app.py avec configuration complète
+
+---
+
 ## Session 5 - 2025-12-30 - Feature #4: docker-compose.yml base setup
 
 ### Ce qui a été fait

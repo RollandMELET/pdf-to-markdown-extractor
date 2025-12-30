@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 4,
+  "completed": 6,
   "features": [
     {
       "id": 1,
@@ -47,7 +47,7 @@
       "name": ".env.example file",
       "description": "Create .env.example with all required environment variables documented",
       "category": "Phase 1 - Infrastructure",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "File contains REDIS_URL, MISTRAL_API_KEY, MAX_FILE_SIZE_MB, etc."
     },
@@ -56,7 +56,7 @@
       "name": "FastAPI app skeleton",
       "description": "Create src/api/main.py with FastAPI app, CORS, basic health endpoint",
       "category": "Phase 1 - Infrastructure",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "GET /health returns {status: 'ok'}"
     },
