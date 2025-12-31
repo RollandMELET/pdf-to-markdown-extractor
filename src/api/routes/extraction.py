@@ -6,16 +6,75 @@ REST API endpoints for PDF extraction, job management, and results retrieval.
 
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, File, UploadFile, HTTPException, BackgroundTasks
+from fastapi import APIRouter, File, UploadFile, HTTPException, BackgroundTasks, Header, Request
 from pydantic import BaseModel, Field, HttpUrl
+import magic
 
 from loguru import logger
 
 from src.core.tasks import extract_pdf_task
 from src.core.job_tracker import JobTracker, JobStatus
+from src.core.config import settings
 from src.utils.file_utils import copy_file_to_upload
 
 router = APIRouter(prefix="/api/v1", tags=["extraction"])
+
+
+# Feature #112: Rate limiting storage (simple in-memory for now)
+from collections import defaultdict
+from datetime import datetime, timedelta
+
+rate_limit_storage = defaultdict(list)
+
+
+def check_rate_limit(ip: str, limit: int = 10, window_minutes: int = 1) -> bool:
+    """
+    Check rate limit for IP (Feature #112).
+
+    Args:
+        ip: Client IP address.
+        limit: Max requests per window.
+        window_minutes: Time window in minutes.
+
+    Returns:
+        bool: True if within limit, False if exceeded.
+    """
+    now = datetime.now()
+    window_start = now - timedelta(minutes=window_minutes)
+
+    # Clean old entries
+    rate_limit_storage[ip] = [
+        timestamp for timestamp in rate_limit_storage[ip]
+        if timestamp > window_start
+    ]
+
+    # Check limit
+    if len(rate_limit_storage[ip]) >= limit:
+        return False
+
+    # Add current request
+    rate_limit_storage[ip].append(now)
+    return True
+
+
+def validate_api_key(api_key: Optional[str]) -> bool:
+    """
+    Validate API key (Feature #113).
+
+    Args:
+        api_key: API key from header.
+
+    Returns:
+        bool: True if valid or not required.
+    """
+    # Feature #113: Optional API key authentication
+    expected_key = getattr(settings, 'api_key', None)
+
+    if not expected_key:
+        # API key not configured, allow all
+        return True
+
+    return api_key == expected_key
 
 
 # Feature #109: Pydantic models for request/response validation
@@ -76,22 +135,35 @@ class ReviewResponse(BaseModel):
 # Feature #101: POST /api/v1/extract endpoint
 @router.post("/extract", response_model=ExtractionResponse)
 async def extract_pdf(
+    request: Request,
     background_tasks: BackgroundTasks,
     file: Optional[UploadFile] = File(None),
     request_data: Optional[ExtractionRequest] = None,
+    x_api_key: Optional[str] = Header(None),
 ) -> ExtractionResponse:
     """
-    Extract PDF with file upload or URL (Feature #101).
+    Extract PDF with file upload or URL (Features #101, #110-113).
+
+    Features:
+    - #101: File upload and URL support
+    - #110: File size limit enforcement
+    - #111: MIME type validation
+    - #112: Rate limiting (10 req/min per IP)
+    - #113: Optional API key authentication
 
     Accepts either:
     - File upload: multipart/form-data with 'file' field
     - URL: JSON body with 'url' field
+
+    Headers:
+    - X-API-Key: Optional API key for authentication (Feature #113)
 
     Returns job_id for tracking extraction progress.
 
     Example:
         POST /api/v1/extract
         Content-Type: multipart/form-data
+        X-API-Key: your-api-key-here
         file: document.pdf
         strategy: parallel_local
 
@@ -104,6 +176,21 @@ async def extract_pdf(
     """
     logger.info("POST /api/v1/extract called")
 
+    # Feature #112: Rate limiting
+    client_ip = request.client.host if request.client else "unknown"
+    if not check_rate_limit(client_ip):
+        raise HTTPException(
+            status_code=429,
+            detail="Rate limit exceeded. Maximum 10 requests per minute."
+        )
+
+    # Feature #113: API key validation
+    if not validate_api_key(x_api_key):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid API key"
+        )
+
     # Validate input
     if not file and not (request_data and request_data.url):
         raise HTTPException(
@@ -113,16 +200,34 @@ async def extract_pdf(
 
     # Handle file upload
     if file:
+        # Read file content
+        content = await file.read()
+
+        # Feature #110: File size limit
+        max_size_bytes = settings.max_file_size_mb * 1024 * 1024
+        if len(content) > max_size_bytes:
+            raise HTTPException(
+                status_code=413,
+                detail=f"File too large. Maximum size: {settings.max_file_size_mb} MB"
+            )
+
+        # Feature #111: MIME type validation
+        mime_type = magic.from_buffer(content, mime=True)
+        if mime_type != 'application/pdf':
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid file type. Expected PDF, got {mime_type}"
+            )
+
         # Save uploaded file
         upload_dir = Path("data/uploads")
         upload_dir.mkdir(parents=True, exist_ok=True)
 
         file_path = upload_dir / file.filename
         with open(file_path, "wb") as f:
-            content = await file.read()
             f.write(content)
 
-        logger.info(f"File uploaded: {file.filename} ({len(content)} bytes)")
+        logger.info(f"File uploaded: {file.filename} ({len(content)} bytes, {mime_type})")
 
     elif request_data and request_data.url:
         # Download from URL (placeholder)

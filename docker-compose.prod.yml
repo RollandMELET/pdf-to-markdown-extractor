@@ -1,0 +1,135 @@
+# Production Docker Compose Configuration (Feature #130)
+
+services:
+  # ==========================================
+  # API Service (FastAPI)
+  # ==========================================
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pdf-extractor-api-prod
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
+      - API_KEY=${API_KEY:-}
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+    volumes:
+      - ./data/uploads:/app/data/uploads
+      - ./data/outputs:/app/data/outputs
+      - ./data/cache:/app/data/cache
+      - ./config:/app/config
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - pdf-extractor-network
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==========================================
+  # Celery Worker
+  # ==========================================
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pdf-extractor-worker-prod
+    command: celery -A src.core.celery_app worker --loglevel=info --concurrency=4
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+    volumes:
+      - ./data/uploads:/app/data/uploads
+      - ./data/outputs:/app/data/outputs
+      - ./data/cache:/app/data/cache
+      - ./config:/app/config
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - pdf-extractor-network
+    restart: always
+    deploy:
+      replicas: 2  # Scale for production
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
+
+  # ==========================================
+  # Redis Service
+  # ==========================================
+  redis:
+    image: redis:7-alpine
+    container_name: pdf-extractor-redis-prod
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_prod:/data
+    networks:
+      - pdf-extractor-network
+    restart: always
+    command: redis-server --maxmemory 2gb --maxmemory-policy allkeys-lru --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==========================================
+  # Streamlit UI (Optional)
+  # ==========================================
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: pdf-extractor-streamlit-prod
+    ports:
+      - "8501:8501"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./data/outputs:/app/data/outputs
+    depends_on:
+      - api
+      - redis
+    networks:
+      - pdf-extractor-network
+    restart: always
+    profiles:
+      - with-ui
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  pdf-extractor-network:
+    driver: bridge
+
+# ==========================================
+# Volumes
+# ==========================================
+volumes:
+  redis_data_prod:
+    driver: local

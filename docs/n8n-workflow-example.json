@@ -1,0 +1,112 @@
+{
+  "name": "PDF-to-Markdown Extraction Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8000/api/v1/extract",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "strategy",
+              "value": "parallel_local"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "={{ $env.PDF_EXTRACTOR_API_KEY }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Start Extraction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "name": "Wait for Processing",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "webhookId": "={{ $json.job_id }}"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=http://localhost:8000/api/v1/status/{{ $json.job_id }}"
+      },
+      "name": "Check Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.status }}",
+              "value2": "completed"
+            }
+          ]
+        }
+      },
+      "name": "If Completed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=http://localhost:8000/api/v1/result/{{ $json.job_id }}"
+      },
+      "name": "Get Result",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 200]
+    },
+    {
+      "parameters": {
+        "filePath": "=/tmp/result-{{ $json.job_id }}.md",
+        "fileContent": "={{ $json.result.markdown }}"
+      },
+      "name": "Save Markdown",
+      "type": "n8n-nodes-base.writeFile",
+      "typeVersion": 1,
+      "position": [1250, 200]
+    }
+  ],
+  "connections": {
+    "Start Extraction": {
+      "main": [[{"node": "Wait for Processing", "type": "main", "index": 0}]]
+    },
+    "Wait for Processing": {
+      "main": [[{"node": "Check Status", "type": "main", "index": 0}]]
+    },
+    "Check Status": {
+      "main": [[{"node": "If Completed", "type": "main", "index": 0}]]
+    },
+    "If Completed": {
+      "main": [
+        [{"node": "Get Result", "type": "main", "index": 0}],
+        [{"node": "Wait for Processing", "type": "main", "index": 0}]
+      ]
+    },
+    "Get Result": {
+      "main": [[{"node": "Save Markdown", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {}
+}

@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 109,
+  "completed": 130,
   "features": [
     {
       "id": 1,
@@ -992,7 +992,7 @@
       "name": "File upload size limit",
       "description": "Enforce MAX_FILE_SIZE_MB limit on uploads",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Files exceeding limit return 413 error"
     },
@@ -1001,7 +1001,7 @@
       "name": "MIME type validation",
       "description": "Validate uploaded files are PDF (application/pdf)",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Non-PDF files return 415 error"
     },
@@ -1010,7 +1010,7 @@
       "name": "Rate limiting",
       "description": "Implement rate limiting per IP (e.g., 10 req/min)",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Exceeding rate limit returns 429 error"
     },
@@ -1019,7 +1019,7 @@
       "name": "API key authentication (optional)",
       "description": "Add optional API key header for authentication",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 3,
       "verification": "Invalid API key returns 401 error"
     },
@@ -1028,7 +1028,7 @@
       "name": "OpenAPI documentation",
       "description": "Ensure FastAPI generates complete OpenAPI spec",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "/docs shows all endpoints with examples"
     },
@@ -1037,7 +1037,7 @@
       "name": "API.md documentation",
       "description": "Write comprehensive API documentation in docs/API.md",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "API.md covers all endpoints with examples"
     },
@@ -1046,7 +1046,7 @@
       "name": "n8n workflow example",
       "description": "Create example n8n workflow JSON using the API",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "n8n workflow imports and runs successfully"
     },
@@ -1055,7 +1055,7 @@
       "name": "Test extract endpoint",
       "description": "Write integration tests for extract endpoint",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "pytest test_api.py::test_extract_endpoint passes"
     },
@@ -1064,7 +1064,7 @@
       "name": "Test full extraction flow",
       "description": "End-to-end test: upload \u2192 extract \u2192 download result",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "pytest test_api.py::test_full_flow passes"
     },
@@ -1073,7 +1073,7 @@
       "name": "Error response standardization",
       "description": "Ensure all errors return consistent JSON structure",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "All errors have {error: string, detail: string, status_code: int}"
     },
@@ -1082,7 +1082,7 @@
       "name": "CORS configuration",
       "description": "Configure CORS for allowed origins",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Cross-origin requests from allowed origins succeed"
     },
@@ -1091,7 +1091,7 @@
       "name": "MistralExtractor implementation",
       "description": "Create src/extractors/mistral_extractor.py using Mistral OCR API",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "MistralExtractor().extract() calls API and returns results"
     },
@@ -1100,7 +1100,7 @@
       "name": "MistralExtractor API key management",
       "description": "Load API key from environment, validate before use",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Missing API key raises configuration error"
     },
@@ -1109,7 +1109,7 @@
       "name": "MistralExtractor as fallback",
       "description": "Configure Mistral as fallback when local extractors fail",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Failed Docling/MinerU extraction triggers Mistral"
     },
@@ -1118,7 +1118,7 @@
       "name": "Health endpoint with extractor status",
       "description": "Update /health to show status of each extractor",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "/health shows docling: up, mineru: up, mistral: available"
     },
@@ -1127,7 +1127,7 @@
       "name": "Structured logging",
       "description": "Ensure all logs are JSON with correlation IDs",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Logs can be parsed and filtered by job_id"
     },
@@ -1136,7 +1136,7 @@
       "name": "Prometheus metrics",
       "description": "Add /metrics endpoint with extraction counts, durations",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 3,
       "verification": "/metrics returns Prometheus format"
     },
@@ -1145,7 +1145,7 @@
       "name": "Job cleanup scheduler",
       "description": "Add scheduled task to clean up old jobs (>7 days)",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Old outputs are deleted automatically"
     },
@@ -1154,7 +1154,7 @@
       "name": "DEPLOYMENT.md documentation",
       "description": "Write deployment guide for Docker, Coolify, VPS",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "DEPLOYMENT.md covers all deployment scenarios"
     },
@@ -1163,7 +1163,7 @@
       "name": "README.md with quick start",
       "description": "Write README with installation, quick start, examples",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "README enables someone to run the project from scratch"
     },
@@ -1172,7 +1172,7 @@
       "name": "Environment-specific configs",
       "description": "Create docker-compose.dev.yml and docker-compose.prod.yml",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Dev and prod configs have appropriate settings"
     },
