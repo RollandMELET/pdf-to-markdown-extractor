@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 130,
+  "completed": 152,
   "features": [
     {
       "id": 1,
@@ -1181,7 +1181,7 @@
       "name": "End-to-end test with simple PDF",
       "description": "Full E2E test: API upload \u2192 extraction \u2192 download",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "E2E test passes in Docker environment"
     },
@@ -1190,7 +1190,7 @@
       "name": "End-to-end test with complex PDF",
       "description": "E2E test with technical report including arbitration",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Complex PDF processed with arbitration flow"
     },
@@ -1199,7 +1199,7 @@
       "name": "Performance test with 50-page PDF",
       "description": "Test extraction of large document, verify completion",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "50-page PDF extracted in < 5 minutes"
     },
@@ -1208,7 +1208,7 @@
       "name": "Memory leak check",
       "description": "Run multiple extractions, verify memory doesn't grow unbounded",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Memory stable after 10+ extractions"
     },
@@ -1217,7 +1217,7 @@
       "name": "Security review",
       "description": "Review file handling, input validation, injection risks",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "No obvious security vulnerabilities"
     },
@@ -1226,7 +1226,7 @@
       "name": "Mac M4 local testing",
       "description": "Verify full stack works on Mac M4 with Docker",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "docker-compose up works on Mac M4"
     },
@@ -1235,7 +1235,7 @@
       "name": "VPS deployment test",
       "description": "Deploy to VPS via Coolify, verify functionality",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "API accessible from internet, extraction works"
     },
@@ -1244,7 +1244,7 @@
       "name": "Version tagging",
       "description": "Tag release v1.0.0 in git",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "git tag v1.0.0 exists"
     },
@@ -1253,7 +1253,7 @@
       "name": "CHANGELOG.md",
       "description": "Write changelog documenting all features",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "CHANGELOG lists all major features"
     },
@@ -1262,7 +1262,7 @@
       "name": "Final code review",
       "description": "Review all code for consistency, documentation, tests",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Code meets project standards"
     },
@@ -1271,7 +1271,7 @@
       "name": "Extraction strategy parameter",
       "description": "Implement extraction_strategy config: fallback, parallel_local, parallel_all, hybrid",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "orchestrator respects extraction_strategy from config and API options"
     },
@@ -1280,7 +1280,7 @@
       "name": "Hybrid strategy implementation",
       "description": "Implement hybrid strategy: local first, then Mistral if divergences detected",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Hybrid mode triggers Mistral only when local extractors diverge"
     },
@@ -1289,7 +1289,7 @@
       "name": "GET /api/v1/extractors endpoint",
       "description": "List available extractors with their status, version, and capabilities",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "GET /api/v1/extractors returns list of extractors with capabilities"
     },
@@ -1298,7 +1298,7 @@
       "name": "POST /api/v1/test-extractor endpoint",
       "description": "Test a single extractor in isolation with custom options and timing",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "POST /api/v1/test-extractor returns extraction result with timing breakdown"
     },
@@ -1307,7 +1307,7 @@
       "name": "Inline result option",
       "description": "Add inline=true query param to /result endpoint for small documents",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "GET /api/v1/result/xxx?inline=true returns markdown and images in response"
     },
@@ -1316,7 +1316,7 @@
       "name": "Configuration YAML file",
       "description": "Create config/settings.yaml with full configuration schema",
       "category": "Phase 1 - Infrastructure",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "config/settings.yaml exists and is loaded at startup"
     },
@@ -1325,7 +1325,7 @@
       "name": "Config loader with 3-level priority",
       "description": "Implement config loading: env vars < YAML < API params",
       "category": "Phase 1 - Infrastructure",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "API params override YAML which overrides env vars"
     },
@@ -1334,7 +1334,7 @@
       "name": "ExtractorRegistry class",
       "description": "Create registry pattern for dynamic extractor loading and discovery",
       "category": "Phase 4 - Multi-extraction",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "ExtractorRegistry.get_available() returns all enabled extractors"
     },
@@ -1343,7 +1343,7 @@
       "name": "Extractor capabilities method",
       "description": "Implement get_capabilities() for all extractors returning structured dict",
       "category": "Phase 2 - Extraction simple",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Each extractor returns capabilities: ocr, tables, formulas, languages"
     },
@@ -1352,7 +1352,7 @@
       "name": "Test test-extractor endpoint",
       "description": "Write integration tests for /api/v1/test-extractor",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "pytest test_api.py::test_test_extractor passes"
     },
@@ -1361,7 +1361,7 @@
       "name": "EXTRACTOR_GUIDE.md documentation",
       "description": "Write guide for adding new extractors in docs/EXTRACTOR_GUIDE.md",
       "category": "Phase 7 - Finalisation",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "EXTRACTOR_GUIDE.md covers full process with code examples"
     },
@@ -1370,7 +1370,7 @@
       "name": "Arbitration UI for 3 extractors",
       "description": "Update Streamlit UI to show comparison of 3 extractors side by side",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "UI shows 3 columns when parallel_all strategy is used"
     }

@@ -1,0 +1,158 @@
+# PDF-to-Markdown Extractor - Settings Configuration (Feature #146)
+#
+# 3-level priority (Feature #147):
+# 1. API request parameters (highest priority)
+# 2. This YAML file (medium priority)
+# 3. Environment variables (lowest priority)
+
+# ==========================================
+# Application Settings
+# ==========================================
+application:
+  name: "pdf-to-markdown-extractor"
+  version: "1.0.0"
+  environment: "production"  # production, development, testing
+
+# ==========================================
+# API Settings
+# ==========================================
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+
+  # Security (Features #110-113)
+  max_file_size_mb: 50
+  rate_limit_per_minute: 10
+  api_key_required: false
+  api_key: null  # Set via environment variable
+
+  # CORS (Feature #120)
+  cors:
+    allow_origins:
+      - "http://localhost:3000"
+      - "https://yourdomain.com"
+    allow_credentials: true
+    allow_methods: ["GET", "POST", "PUT", "DELETE"]
+    allow_headers: ["*"]
+
+# ==========================================
+# Redis Settings
+# ==========================================
+redis:
+  url: "redis://localhost:6379/0"
+  max_connections: 20
+  socket_timeout: 5
+  socket_keepalive: true
+  socket_keepalive_options: {}
+  retry_on_timeout: true
+  decode_responses: true
+
+# ==========================================
+# Celery Settings
+# ==========================================
+celery:
+  broker_url: null  # Defaults to redis_url
+  result_backend: null  # Defaults to redis_url
+  task_serializer: "json"
+  result_serializer: "json"
+  accept_content: ["json"]
+  timezone: "UTC"
+  enable_utc: true
+
+  # Task execution
+  task_time_limit: 600  # 10 minutes
+  task_soft_time_limit: 540  # 9 minutes
+  task_track_started: true
+  task_acks_late: true
+
+  # Worker
+  worker_prefetch_multiplier: 1
+  worker_max_tasks_per_child: 50
+
+# ==========================================
+# Extraction Settings (Feature #141)
+# ==========================================
+extraction:
+  # Default strategy (Feature #141)
+  default_strategy: "fallback"  # fallback, parallel_local, parallel_all, hybrid
+
+  # Strategies configuration
+  strategies:
+    fallback:
+      order: ["docling", "mineru", "mistral"]
+
+    parallel_local:
+      extractors: ["docling", "mineru"]
+      max_workers: 2
+
+    parallel_all:
+      extractors: ["docling", "mineru", "mistral"]
+      max_workers: 3
+
+    hybrid:  # Feature #142
+      local_first: ["docling", "mineru"]
+      mistral_threshold: 5  # Use Mistral if >5 divergences
+
+  # Comparison
+  similarity_threshold: 0.85
+  auto_merge_threshold: 0.95
+  divergence_review_threshold: 5
+
+  # Limits
+  max_pages: 100
+  timeout_seconds: 600
+
+# ==========================================
+# Storage Settings
+# ==========================================
+storage:
+  upload_dir: "./data/uploads"
+  output_dir: "./data/outputs"
+  cache_dir: "./data/cache"
+  cleanup_after_days: 7
+
+# ==========================================
+# Logging Settings (Feature #125)
+# ==========================================
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "json"  # json, text
+  directory: "./logs"
+  rotation: "100 MB"
+  retention: "30 days"
+  compression: "zip"
+
+  # Structured logging
+  add_correlation_id: true
+  add_request_id: true
+
+# ==========================================
+# Monitoring Settings (Feature #126)
+# ==========================================
+monitoring:
+  enable_metrics: true
+  metrics_port: 9090
+  enable_health_checks: true
+  enable_resource_monitoring: true
+
+# ==========================================
+# External APIs
+# ==========================================
+external_apis:
+  mistral:
+    api_key: null  # Set via MISTRAL_API_KEY env var
+    model: "pixtral-12b-2024-09-04"
+    timeout: 120
+    max_retries: 3
+
+# ==========================================
+# Webhook Settings (Features #107-108)
+# ==========================================
+webhooks:
+  enabled: true
+  timeout: 30
+  max_retries: 3
+  retry_delay: 5
+  backoff_multiplier: 2.0
