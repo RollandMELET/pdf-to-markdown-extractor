@@ -4,7 +4,7 @@
   "created_at": "2025-12-30",
   "last_updated": "2025-12-30",
   "total_features": 152,
-  "completed": 88,
+  "completed": 109,
   "features": [
     {
       "id": 1,
@@ -803,7 +803,7 @@
       "name": "Streamlit jobs list page",
       "description": "Create page showing jobs awaiting arbitration",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "UI shows list of pending jobs"
     },
@@ -812,7 +812,7 @@
       "name": "Streamlit comparison view",
       "description": "Create side-by-side comparison view for divergences",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "UI shows two columns with different extractions"
     },
@@ -821,7 +821,7 @@
       "name": "Streamlit choice buttons",
       "description": "Add buttons to choose extraction A, B, or edit manually",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Clicking button records choice"
     },
@@ -830,7 +830,7 @@
       "name": "Streamlit manual editor",
       "description": "Add text area for manual content editing",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "User can type custom content and save"
     },
@@ -839,7 +839,7 @@
       "name": "Streamlit PDF preview",
       "description": "Show original PDF page as image for reference",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "UI shows PDF page image"
     },
@@ -848,7 +848,7 @@
       "name": "Arbitration persistence",
       "description": "Save user choices to Redis/database",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Choices persist across page reload"
     },
@@ -857,7 +857,7 @@
       "name": "Apply arbitration choices",
       "description": "Re-merge document using user arbitration choices",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Final document reflects user choices"
     },
@@ -866,7 +866,7 @@
       "name": "Complete arbitration flow",
       "description": "Move job from needs_review to completed after all divergences resolved",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Job status changes to completed"
     },
@@ -875,7 +875,7 @@
       "name": "Test comparison with identical results",
       "description": "Test that identical extractions produce no divergences",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "pytest test_comparator.py::test_no_divergences passes"
     },
@@ -884,7 +884,7 @@
       "name": "Test comparison with differences",
       "description": "Test that different extractions produce correct divergence list",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "pytest test_comparator.py::test_divergences_detected passes"
     },
@@ -893,7 +893,7 @@
       "name": "Dockerfile for Streamlit",
       "description": "Create Dockerfile.streamlit for arbitration UI",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "docker build -f Dockerfile.streamlit succeeds"
     },
@@ -902,7 +902,7 @@
       "name": "Streamlit in docker-compose",
       "description": "Add streamlit service to docker-compose with optional profile",
       "category": "Phase 5 - Comparaison & Arbitrage",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "docker-compose --profile with-ui up starts Streamlit"
     },
@@ -911,7 +911,7 @@
       "name": "POST /api/v1/extract endpoint",
       "description": "Implement full extract endpoint with file upload, URL, and options",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "POST with PDF file returns job_id"
     },
@@ -920,7 +920,7 @@
       "name": "GET /api/v1/status/{job_id} endpoint",
       "description": "Implement status endpoint returning job state and progress",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "GET returns current status and progress percentage"
     },
@@ -929,7 +929,7 @@
       "name": "GET /api/v1/result/{job_id} endpoint",
       "description": "Implement result endpoint returning extraction results",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "GET returns markdown, metadata, download URLs"
     },
@@ -938,7 +938,7 @@
       "name": "POST /api/v1/arbitrate/{job_id} endpoint",
       "description": "Implement arbitration endpoint for submitting choices",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "POST with choice updates divergence resolution"
     },
@@ -947,7 +947,7 @@
       "name": "GET /api/v1/review/{job_id} endpoint",
       "description": "Implement review endpoint listing divergences to arbitrate",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "GET returns list of Divergence objects"
     },
@@ -956,7 +956,7 @@
       "name": "GET /api/v1/download/{job_id}/{file} endpoint",
       "description": "Implement file download endpoint for results",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "GET returns file content with correct MIME type"
     },
@@ -965,7 +965,7 @@
       "name": "Webhook callback implementation",
       "description": "Send POST to callback_url when job completes or fails",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Callback URL receives POST with job result"
     },
@@ -974,7 +974,7 @@
       "name": "Webhook retry logic",
       "description": "Retry webhook 3 times with exponential backoff on failure",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 2,
       "verification": "Failed webhooks are retried"
     },
@@ -983,7 +983,7 @@
       "name": "Request validation with Pydantic",
       "description": "Create Pydantic models for all API requests/responses",
       "category": "Phase 6 - API Production",
-      "status": "pending",
+      "status": "passing",
       "priority": 1,
       "verification": "Invalid requests return 422 with validation errors"
     },

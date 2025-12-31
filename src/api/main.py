@@ -11,6 +11,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
+from src.api.routes import extraction
+
 
 # ==========================================
 # Application Lifecycle
@@ -83,3 +85,9 @@ async def health():
         "service": "pdf-to-markdown-extractor",
         "version": "1.0.0"
     }
+
+
+# ==========================================
+# Include API Routes (Features #101-106)
+# ==========================================
+app.include_router(extraction.router)
