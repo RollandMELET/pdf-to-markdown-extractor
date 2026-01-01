@@ -108,8 +108,42 @@ class Orchestrator:
 
         # Feature #61: Use parallel extraction for complex documents
         if strategy == "fallback":
-            # Use single extractor (Docling)
-            result = self.extract_simple(file_path, extractor_name="docling", options=options)
+            # Try extractors in order: Docling → MinerU → Mistral
+            fallback_order = ["docling", "mineru", "mistral"]
+            result = None
+            last_error = None
+
+            for extractor_name in fallback_order:
+                if not self.registry.has_extractor(extractor_name):
+                    logger.debug(f"Extractor '{extractor_name}' not available in fallback chain, skipping")
+                    continue
+
+                logger.info(f"Fallback: trying {extractor_name}...")
+                try:
+                    result = self.extract_simple(file_path, extractor_name=extractor_name, options=options)
+
+                    if result.success:
+                        logger.info(f"✅ Fallback successful with {extractor_name} (confidence: {result.confidence_score})")
+                        break
+                    else:
+                        logger.warning(f"❌ {extractor_name} failed (success=False), trying next in chain")
+                        last_error = f"{extractor_name} returned success=False"
+                except Exception as e:
+                    logger.warning(f"❌ {extractor_name} raised exception: {e}, trying next")
+                    last_error = str(e)
+                    continue
+
+            # If all extractors failed, return last result or raise
+            if not result or not result.success:
+                logger.error(f"All extractors in fallback chain failed. Last error: {last_error}")
+                # Return failed result if we have one, otherwise raise
+                if result:
+                    return {
+                        "result": result,
+                        "complexity": complexity_score.to_dict(),
+                        "strategy_used": strategy,
+                    }
+                raise ValueError(f"All extractors in fallback chain failed: {last_error}")
 
             return {
                 "result": result,

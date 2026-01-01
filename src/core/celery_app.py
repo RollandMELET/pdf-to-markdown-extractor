@@ -111,3 +111,20 @@ def health_check(self):
         "task_id": self.request.id,
         "message": "Celery worker is running and healthy"
     }
+
+
+# ==========================================
+# Alias for imports
+# ==========================================
+celery_app = app  # Allow import as 'celery_app'
+
+
+# ==========================================
+# Import tasks to register them
+# ==========================================
+# Import after app definition to avoid circular imports
+try:
+    import src.core.tasks  # noqa: F401
+    logger.info("Tasks module imported successfully")
+except ImportError as e:
+    logger.warning(f"Failed to import tasks module: {e}")

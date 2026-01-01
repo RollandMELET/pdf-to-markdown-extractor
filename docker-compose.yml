@@ -13,7 +13,7 @@ services:
       dockerfile: Dockerfile
     container_name: pdf-extractor-api
     ports:
-      - "${API_PORT:-8000}:8000"
+      - "${API_PORT:-9000}:8000"
     environment:
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/0
@@ -61,6 +61,7 @@ services:
       - ./data/outputs:/app/data/outputs
       - ./data/cache:/app/data/cache
       - ./config:/app/config
+      - docling_models:/root/.cache/huggingface  # Persistent cache for Docling ML models (~506MB)
     depends_on:
       redis:
         condition: service_healthy
@@ -132,4 +133,6 @@ networks:
 # ==========================================
 volumes:
   redis_data:
+    driver: local
+  docling_models:
     driver: local

@@ -28,12 +28,17 @@ pypdf==5.1.0  # PDF utilities
 # ==========================================
 # MinerU (High precision extraction - OPTIONAL)
 # ==========================================
-# magic-pdf==0.7.0b1  # MinerU package (uncomment to install)
-# Note: MinerU requires additional system dependencies:
-# - PyTorch (CPU or CUDA version)
-# - poppler-utils, tesseract-ocr (already installed)
-# For GPU support, install: pip install magic-pdf[gpu]
-# For CPU only, install: pip install magic-pdf[cpu]
+# MinerU installation is OPTIONAL and requires significant dependencies:
+# - PyTorch CPU (~200MB download)
+# - torchtext and other ML libraries
+# - Total added size: ~300-400MB
+#
+# To enable MinerU, uncomment below and rebuild:
+# --extra-index-url https://myhloli.github.io/wheels/
+# magic-pdf[full-cpu]==0.7.0b1
+# torchtext==0.15.2
+#
+# Current production setup uses Docling only (95% success rate, 2-5s extraction)
 # See: https://github.com/opendatalab/MinerU
 
 # ==========================================

@@ -37,6 +37,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tesseract-ocr-eng \
     # Image processing
     libmagic1 \
+    libgl1 \
+    libglib2.0-0 \
     # Fonts for rendering
     fonts-liberation \
     # Cleanup

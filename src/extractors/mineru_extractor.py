@@ -133,6 +133,7 @@ class MinerUExtractor(BaseExtractor):
             from magic_pdf.pipe.UNIPipe import UNIPipe
             from magic_pdf.pipe.OCRPipe import OCRPipe
             from magic_pdf.rw.DiskReaderWriter import DiskReaderWriter
+            from magic_pdf.model.doc_analyze_by_custom_model import doc_analyze
 
             # Read PDF file
             pdf_bytes = file_path.read_bytes()
@@ -141,30 +142,28 @@ class MinerUExtractor(BaseExtractor):
             output_dir = file_path.parent / ".mineru_temp"
             output_dir.mkdir(exist_ok=True)
 
-            # Initialize reader/writer
-            reader_writer = DiskReaderWriter(str(output_dir))
+            # Initialize image writer
+            image_writer = DiskReaderWriter(str(output_dir))
 
-            # Choose pipeline based on OCR requirement and VLM mode (Feature #70)
-            if vlm_mode:
-                # Feature #70: Use VLM-enhanced pipeline for better accuracy
-                # VLM (Vision Language Model) uses multimodal models for understanding
-                logger.info("Using VLM mode for enhanced extraction accuracy")
+            # Step 1: Analyze document structure (MinerU 0.7.0+ API)
+            logger.debug(f"Analyzing document structure with OCR={ocr_enabled}")
+            analysis_result = doc_analyze(pdf_bytes, ocr=ocr_enabled, show_log=False)
 
-                # VLM mode typically uses OCR with enhanced models
-                pipe = OCRPipe(pdf_bytes, reader_writer)
+            # Step 2: Choose pipeline based on OCR requirement and VLM mode (Feature #70)
+            if ocr_enabled or vlm_mode:
+                # Use OCR pipeline for scanned documents or VLM mode
+                if vlm_mode:
+                    logger.info("Using VLM mode for enhanced extraction accuracy")
 
-                # Note: Actual VLM configuration would require:
-                # - MinerU VLM-specific pipeline (if available)
-                # - Enhanced model weights
-                # - GPU for optimal performance
-                # This is a basic implementation that uses OCR as foundation
+                # OCRPipe requires model_list from analysis
+                model_list = analysis_result.get("model_list", [])
+                pipe = OCRPipe(pdf_bytes, model_list, image_writer, is_debug=False)
 
-            elif ocr_enabled:
-                # Use OCR pipeline for scanned documents
-                pipe = OCRPipe(pdf_bytes, reader_writer)
             else:
                 # Use standard pipeline for digital PDFs
-                pipe = UNIPipe(pdf_bytes, reader_writer)
+                # UNIPipe requires jso_useful_key from analysis
+                jso_useful_key = analysis_result
+                pipe = UNIPipe(pdf_bytes, jso_useful_key, image_writer, is_debug=False)
 
             # Run extraction
             pipe_result = pipe.pipe_parse()

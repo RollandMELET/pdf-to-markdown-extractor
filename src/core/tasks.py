@@ -14,6 +14,50 @@ from src.core.job_tracker import JobTracker, JobStatus
 from src.core.orchestrator import Orchestrator
 
 
+def _serialize_result(extraction_result: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Serialize extraction result for Celery.
+
+    Args:
+        extraction_result: Result from orchestrator.extract().
+
+    Returns:
+        dict: Serialized result (JSON-compatible).
+    """
+    serialized = {
+        "complexity": extraction_result["complexity"],
+        "strategy_used": extraction_result["strategy_used"],
+    }
+
+    # Serialize main result
+    result = extraction_result["result"]
+    if result:
+        serialized["result"] = {
+            "markdown": result.markdown,
+            "metadata": result.metadata,
+            "confidence_score": result.confidence_score,
+            "extraction_time": result.extraction_time,
+            "extractor_name": result.extractor_name,
+            "extractor_version": result.extractor_version,
+            "success": result.success,
+            "page_count": result.page_count,
+            "table_count": len(result.tables),
+            "image_count": len(result.images),
+            "error_count": len(result.errors),
+            "warning_count": len(result.warnings),
+        }
+
+    # Serialize aggregation if present (parallel strategies)
+    if "aggregation" in extraction_result:
+        serialized["aggregation"] = {
+            "extractor_count": extraction_result["aggregation"]["extractor_count"],
+            "successful_count": extraction_result["aggregation"]["successful_count"],
+            "average_confidence": extraction_result["aggregation"]["average_confidence"],
+        }
+
+    return serialized
+
+
 @celery_app.task(
     name="pdf_extractor.extract_pdf",
     bind=True,
@@ -83,7 +127,7 @@ def extract_pdf_task(
             tracker.set_status(job_id, JobStatus.COMPARING, progress_percentage=75.0)
 
         # Serialize ExtractionResult for Celery
-        serialized = self._serialize_result(extraction_result)
+        serialized = _serialize_result(extraction_result)
 
         # Feature #65-66: Update status to completed
         tracker.set_status(
@@ -109,46 +153,6 @@ def extract_pdf_task(
 
         # Retry on failure
         raise self.retry(exc=e)
-
-    def _serialize_result(self, extraction_result: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Serialize extraction result for Celery.
-
-        Args:
-            extraction_result: Result from orchestrator.extract().
-
-        Returns:
-            dict: Serialized result (JSON-compatible).
-        """
-        serialized = {
-            "complexity": extraction_result["complexity"],
-            "strategy_used": extraction_result["strategy_used"],
-        }
-
-        # Serialize main result
-        result = extraction_result["result"]
-        if result:
-            serialized["result"] = {
-                "markdown": result.markdown,
-                "metadata": result.metadata,
-                "confidence_score": result.confidence_score,
-                "extraction_time": result.extraction_time,
-                "extractor_name": result.extractor_name,
-                "success": result.success,
-                "table_count": len(result.tables),
-                "image_count": len(result.images),
-                "formula_count": len(result.formulas),
-            }
-
-        # Serialize aggregation if present (parallel strategies)
-        if "aggregation" in extraction_result:
-            serialized["aggregation"] = {
-                "extractor_count": extraction_result["aggregation"]["extractor_count"],
-                "successful_count": extraction_result["aggregation"]["successful_count"],
-                "average_confidence": extraction_result["aggregation"]["average_confidence"],
-            }
-
-        return serialized
 
 
 logger.info("Celery tasks module loaded")
