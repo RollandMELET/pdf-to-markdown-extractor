@@ -11,6 +11,7 @@ from loguru import logger
 from src.extractors.base import BaseExtractor
 from src.extractors.docling_extractor import DoclingExtractor
 from src.extractors.mineru_extractor import MinerUExtractor
+from src.extractors.mistral_extractor import MistralExtractor
 
 
 class ExtractorRegistry:
@@ -46,8 +47,7 @@ class ExtractorRegistry:
         extractor_classes = [
             DoclingExtractor,
             MinerUExtractor,
-            # Future extractors will be added here:
-            # MistralExtractor (Feature #66+)
+            MistralExtractor,  # Cloud OCR fallback
         ]
 
         logger.info("Discovering extractors...")

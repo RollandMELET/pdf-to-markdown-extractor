@@ -54,10 +54,10 @@ class MistralExtractor(BaseExtractor):
             return
 
         try:
-            # Try to import Mistral client
-            from mistralai.client import MistralClient
+            # Try to import Mistral client (new API 1.0+)
+            from mistralai import Mistral
 
-            self._client = MistralClient(api_key=self._api_key)
+            self._client = Mistral(api_key=self._api_key)
             logger.info(f"{self.name} initialized with API key")
 
         except ImportError as e:
@@ -65,6 +65,9 @@ class MistralExtractor(BaseExtractor):
                 f"{self.name} not available: mistralai package not installed. "
                 f"Install with: pip install mistralai. Error: {e}"
             )
+            self._client = None
+        except Exception as e:
+            logger.warning(f"{self.name} initialization failed: {e}")
             self._client = None
 
     def is_available(self) -> bool:
@@ -169,20 +172,56 @@ class MistralExtractor(BaseExtractor):
 
     def _call_mistral_ocr(self, pdf_bytes: bytes, model: str) -> str:
         """
-        Call Mistral OCR API.
+        Call Mistral OCR API using vision model.
 
         Args:
             pdf_bytes: PDF file bytes.
-            model: Model to use.
+            model: Model to use (default: pixtral-12b-2024-09-04).
 
         Returns:
             str: Extracted markdown.
         """
-        # Placeholder implementation
-        # Actual implementation would use Mistral's document API
-        logger.warning("Mistral OCR API call is a placeholder implementation")
+        import base64
 
-        return f"# Document\n\nExtracted by Mistral (model: {model})\n\n*Content placeholder*"
+        # Convert PDF to base64 for API
+        pdf_b64 = base64.b64encode(pdf_bytes).decode('utf-8')
+
+        try:
+            # Use Mistral chat API with vision model for OCR
+            # Note: This uses the vision capability to "read" the PDF
+            response = self._client.chat.complete(
+                model=model,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Extract all text from this PDF document and format it as clean Markdown. Preserve structure, headings, tables, and lists. Be precise and complete."
+                            },
+                            {
+                                "type": "image_url",
+                                "image_url": f"data:application/pdf;base64,{pdf_b64}"
+                            }
+                        ]
+                    }
+                ]
+            )
+
+            # Extract markdown from response
+            markdown = response.choices[0].message.content
+            logger.info(f"Mistral API extraction successful ({len(markdown)} chars)")
+
+            return markdown
+
+        except Exception as e:
+            logger.error(f"Mistral API call failed: {e}")
+            raise ExtractionError(
+                extractor=self.name,
+                message=f"Mistral API call failed: {e}",
+                file_path="<pdf_bytes>",  # file_path not available in this scope
+                original_error=e
+            )
 
     def get_capabilities(self) -> Dict[str, Any]:
         """
