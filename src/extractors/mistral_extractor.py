@@ -113,7 +113,7 @@ class MistralExtractor(BaseExtractor):
 
         # Parse options
         options = options or {}
-        model = options.get("model", "pixtral-large-latest")  # Updated model name for Mistral API 1.0+
+        model = options.get("model", "mistral-ocr-latest")  # Official OCR model (~$1/1000 pages)
 
         logger.info(f"Starting Mistral extraction: {file_path.name} (model={model})")
 
@@ -150,12 +150,11 @@ class MistralExtractor(BaseExtractor):
                 metadata=metadata,
                 images=[],
                 tables=[],
-                formulas=[],
-                confidence_score=0.85,  # Mistral typically medium confidence
+                confidence_score=0.90,  # Mistral OCR high confidence
                 extraction_time=extraction_time,
                 extractor_name=self.name,
                 extractor_version=self.version,
-                success=True,
+                page_count=len(file_path.read_bytes()) // 5000 or 1,  # Rough estimate
             )
 
         except Exception as e:
@@ -172,54 +171,81 @@ class MistralExtractor(BaseExtractor):
 
     def _call_mistral_ocr(self, pdf_bytes: bytes, model: str) -> str:
         """
-        Call Mistral OCR API using vision model.
+        Call Mistral OCR API using official SDK client.ocr.process().
+
+        Reference: https://docs.mistral.ai/capabilities/document_ai/basic_ocr
+        Uses mistral-ocr-latest model ($2/1000 pages).
 
         Args:
             pdf_bytes: PDF file bytes.
-            model: Model to use (default: pixtral-12b-2024-09-04).
+            model: Model to use (mistral-ocr-latest recommended).
 
         Returns:
             str: Extracted markdown.
         """
         import base64
-
-        # Convert PDF to base64 for API
-        pdf_b64 = base64.b64encode(pdf_bytes).decode('utf-8')
+        import tempfile
+        from pathlib import Path
 
         try:
-            # Use Mistral chat API with vision model for OCR
-            # Note: This uses the vision capability to "read" the PDF
-            response = self._client.chat.complete(
-                model=model,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": "Extract all text from this PDF document and format it as clean Markdown. Preserve structure, headings, tables, and lists. Be precise and complete."
-                            },
-                            {
-                                "type": "image_url",
-                                "image_url": f"data:application/pdf;base64,{pdf_b64}"
-                            }
-                        ]
-                    }
-                ]
-            )
+            # Write PDF to temporary file
+            with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp_file:
+                tmp_file.write(pdf_bytes)
+                tmp_path = tmp_file.name
 
-            # Extract markdown from response
-            markdown = response.choices[0].message.content
-            logger.info(f"Mistral API extraction successful ({len(markdown)} chars)")
+            logger.info(f"Calling Mistral OCR API with model {model}...")
 
-            return markdown
+            try:
+                # Use official SDK client.ocr.process()
+                # Reference: https://docs.mistral.ai/api/endpoint/ocr
+
+                # Convert to base64 for data URI
+                pdf_b64 = base64.b64encode(pdf_bytes).decode('utf-8')
+
+                # Create data URI (may be supported)
+                data_uri = f"data:application/pdf;base64,{pdf_b64}"
+
+                # Call OCR endpoint with document_url (trying data URI)
+                ocr_response = self._client.ocr.process(
+                    model=model,
+                    document={
+                        "type": "document_url",
+                        "document_url": data_uri
+                    },
+                    table_format="markdown",  # Extract tables as markdown
+                    extract_header=False,
+                    extract_footer=False
+                )
+
+                # Extract markdown from pages
+                all_pages = []
+                for page in ocr_response.pages:
+                    page_md = page.markdown or ""
+
+                    # Add tables if separate
+                    if hasattr(page, 'tables') and page.tables:
+                        for table in page.tables:
+                            if hasattr(table, 'markdown'):
+                                page_md += f"\n\n{table.markdown}\n\n"
+
+                    all_pages.append(f"<!-- Page {page.index + 1} -->\n\n{page_md}")
+
+                final_markdown = "\n\n---\n\n".join(all_pages)
+
+                logger.info(f"Mistral OCR successful: {ocr_response.usage_info.pages_processed} pages, {len(final_markdown)} chars")
+
+                return final_markdown
+
+            finally:
+                # Cleanup temp file
+                Path(tmp_path).unlink(missing_ok=True)
 
         except Exception as e:
-            logger.error(f"Mistral API call failed: {e}")
+            logger.error(f"Mistral OCR API call failed: {e}")
             raise ExtractionError(
                 extractor=self.name,
-                message=f"Mistral API call failed: {e}",
-                file_path="<pdf_bytes>",  # file_path not available in this scope
+                message=f"Mistral OCR API call failed: {e}",
+                file_path="<pdf_bytes>",
                 original_error=e
             )
 

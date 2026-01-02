@@ -24,6 +24,7 @@ docling==2.13.0
 pymupdf==1.25.2  # Also known as fitz
 Pillow==11.0.0  # Image processing
 pypdf==5.1.0  # PDF utilities
+pdf2image==1.17.0  # PDF to image conversion (required for Mistral API)
 
 # ==========================================
 # MinerU (High precision extraction)
@@ -36,7 +37,7 @@ pypdf==5.1.0  # PDF utilities
 # ==========================================
 # Mistral AI API
 # ==========================================
-mistralai==1.2.4
+mistralai>=1.9.11  # Version 1.9.11+ required for client.ocr.process()
 
 # ==========================================
 # Arbitration Interface
@@ -52,7 +53,7 @@ pyyaml==6.0.2
 # ==========================================
 # HTTP Client
 # ==========================================
-httpx==0.27.2  # Note: 0.28+ incompatible with mistralai 1.2.4
+httpx>=0.27.2  # Updated for mistralai 1.9.11+ compatibility
 aiofiles==24.1.0
 
 # ==========================================

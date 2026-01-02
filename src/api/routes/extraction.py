@@ -6,7 +6,7 @@ REST API endpoints for PDF extraction, job management, and results retrieval.
 
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, File, UploadFile, HTTPException, BackgroundTasks, Header, Request
+from fastapi import APIRouter, File, Form, UploadFile, HTTPException, BackgroundTasks, Header, Request
 from pydantic import BaseModel, Field, HttpUrl
 import magic
 
@@ -138,6 +138,7 @@ async def extract_pdf(
     request: Request,
     background_tasks: BackgroundTasks,
     file: Optional[UploadFile] = File(None),
+    strategy: Optional[str] = Form("fallback"),  # Accept strategy as form field
     request_data: Optional[ExtractionRequest] = None,
     x_api_key: Optional[str] = Header(None),
 ) -> ExtractionResponse:
@@ -247,7 +248,7 @@ async def extract_pdf(
 
     task_result = extract_pdf_task.delay(
         file_path=str(file_path),
-        strategy=request_data.strategy if request_data else "fallback",
+        strategy=strategy,  # Use form parameter
         force_complexity=request_data.force_complexity if request_data else None,
         options=options,
     )

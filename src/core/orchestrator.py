@@ -183,8 +183,42 @@ class Orchestrator:
                 "strategy_used": strategy,
             }
 
+        elif strategy == "parallel_all":
+            # Parallel extraction with ALL extractors (Docling + MinerU + Mistral)
+            extractors_to_use = []
+
+            # Add all available extractors
+            for extractor_name in ["docling", "mineru", "mistral"]:
+                if self.registry.has_extractor(extractor_name):
+                    extractors_to_use.append(self.registry.get(extractor_name))
+
+            if len(extractors_to_use) < 2:
+                logger.warning("Not enough extractors available for parallel_all, using fallback")
+                result = self.extract_simple(file_path, extractor_name="docling", options=options)
+                return {
+                    "result": result,
+                    "complexity": complexity_score.to_dict(),
+                    "strategy_used": "fallback",
+                }
+
+            logger.info(f"Running parallel extraction with {len(extractors_to_use)} extractors: {[e.name for e in extractors_to_use]}")
+
+            # Run parallel extraction
+            results = self.parallel_executor.execute(extractors_to_use, file_path, options)
+
+            # Aggregate results
+            aggregation = self.aggregator.aggregate(results)
+
+            return {
+                "result": aggregation["best_result"],
+                "all_results": results,
+                "aggregation": aggregation,
+                "complexity": complexity_score.to_dict(),
+                "strategy_used": strategy,
+            }
+
         else:
-            # parallel_all, hybrid not yet implemented
+            # hybrid not yet implemented
             logger.warning(
                 f"Strategy '{strategy}' not yet implemented, using fallback strategy"
             )
