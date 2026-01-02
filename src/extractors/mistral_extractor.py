@@ -113,7 +113,7 @@ class MistralExtractor(BaseExtractor):
 
         # Parse options
         options = options or {}
-        model = options.get("model", "pixtral-12b-2024-09-04")
+        model = options.get("model", "pixtral-large-latest")  # Updated model name for Mistral API 1.0+
 
         logger.info(f"Starting Mistral extraction: {file_path.name} (model={model})")
 
