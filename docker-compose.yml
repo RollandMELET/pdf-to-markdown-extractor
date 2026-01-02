@@ -76,6 +76,38 @@ services:
           memory: 2G
 
   # ==========================================
+  # MinerU Worker Service (Dedicated)
+  # ==========================================
+  worker-mineru:
+    build:
+      context: .
+      dockerfile: Dockerfile.mineru
+    container_name: pdf-extractor-worker-mineru
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - MINERU_WORKER=true
+    volumes:
+      - ./data/uploads:/app/data/uploads
+      - ./data/outputs:/app/data/outputs
+      - ./data/cache:/app/data/cache
+      - mineru_models:/root/.cache  # Persistent cache for MinerU models
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - pdf-extractor-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+        reservations:
+          memory: 1G
+
+  # ==========================================
   # Redis Service (Queue & Cache)
   # ==========================================
   redis:
@@ -135,4 +167,6 @@ volumes:
   redis_data:
     driver: local
   docling_models:
+    driver: local
+  mineru_models:
     driver: local

@@ -26,20 +26,12 @@ Pillow==11.0.0  # Image processing
 pypdf==5.1.0  # PDF utilities
 
 # ==========================================
-# MinerU (High precision extraction - OPTIONAL)
+# MinerU (High precision extraction)
 # ==========================================
-# MinerU installation is OPTIONAL and requires significant dependencies:
-# - PyTorch CPU (~200MB download)
-# - torchtext and other ML libraries
-# - Total added size: ~300-400MB
-#
-# To enable MinerU, uncomment below and rebuild:
-# --extra-index-url https://myhloli.github.io/wheels/
-# magic-pdf[full-cpu]==0.7.0b1
-# torchtext==0.15.2
-#
-# Current production setup uses Docling only (95% success rate, 2-5s extraction)
-# See: https://github.com/opendatalab/MinerU
+# MinerU runs in a SEPARATE Docker container (worker-mineru)
+# See: Dockerfile.mineru and requirements-mineru.txt
+# This avoids PyTorch version conflicts with Docling
+# The main worker (this container) uses Docling only
 
 # ==========================================
 # Mistral AI API
