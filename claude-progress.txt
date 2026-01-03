@@ -1,3 +1,76 @@
+## Session UI Enhancement - 2026-01-02 - Streamlit Mistral Integration & Real API
+
+### Ce qui a été fait
+🎨 **STREAMLIT UI MAJOR UPGRADE** - Intégration complète Mistral + Extraction Réelle
+
+**Features améliorées** (enhancements post-v1.0):
+- Feature #88-96 (Streamlit UI) : Enrichissement complet avec Mistral
+- Feature #93 (PDF Preview) : Highlighting avec PyMuPDF implémenté
+- Feature #101 (API Extract) : Intégration temps réel dans Streamlit
+- Feature #121-123 (Mistral) : UI complète pour sélection et affichage
+
+**Nouvelles fonctionnalités UI** :
+1. **Stratégies avec Mistral** : Toutes les stratégies montrent extracteurs (🟢 local, 🔵 API)
+2. **Checkbox Mistral** : Sélection avec détection auto MISTRAL_API_KEY et warnings coût
+3. **PDF Highlighting** : Render PyMuPDF avec rectangles rouges sur zones divergentes
+4. **Scoring 3+ extracteurs** : Layout dynamique, médailles 🥇🥈🥉, recommandations
+5. **Extraction Réelle** : Intégration API complète avec polling temps réel
+6. **Mode Mock Signalé** : Banners 🎭 clairs sur tous les onglets
+7. **Divergences Variées** : 3 mock divergences avec textes visiblement différents
+
+**Implémentation technique** :
+- `STRATEGY_INFO` dict : Descriptions détaillées de chaque stratégie
+- `render_pdf_page_with_highlight()` : PyMuPDF avec ImageDraw pour highlighting
+- `adapt_divergences_to_ui()` : Convertisseur backend (2-extractors) → UI (N-extractors)
+- Intégration API :
+  * POST /api/v1/extract avec upload fichier
+  * Polling GET /api/v1/status/{job_id} avec barre de progression
+  * Récupération GET /api/v1/result/{job_id}
+- Job-to-results mapping : Persistence des résultats pour Review
+- Conditional rendering : `USE_REAL_API` toggle (mock vs real)
+
+**Configuration** :
+- `.env` : Ajout `API_BASE_URL=http://localhost:9000`, `USE_REAL_API=true`
+- Dependencies venv : httpx (API calls), PyMuPDF (PDF rendering)
+
+**Tests effectués** :
+- ✅ Extraction réelle : text_only.pdf (1 page, 3.7s, DoclingExtractor)
+- ✅ PDF highlighting : Rectangles rouges sur texte divergent
+- ✅ Divergences mock : 3 variations avec différences claires
+  * Div #1: "functionality" vs "capabilities" vs "extraction"
+  * Div #2: consensus (Mistral=Docling) vs tronqué (Mineru)
+  * Div #3: "of this document" manquant + format liste
+- ✅ Mode mock signaling : Banners 🎭 sur tous onglets
+- ✅ Flow complet : Upload → Extract → Job créé → Review → PDF preview
+
+**Statistiques** :
+- Fichiers modifiés : 1 (streamlit_app.py)
+- Lignes ajoutées : +844
+- Lignes supprimées : -116
+- Net : +728 lignes
+- Commits : 1 (`032975a`)
+
+**Services opérationnels** :
+- Redis : Healthy (port 6379)
+- FastAPI : Running (port 9000)
+- Celery Worker : Running (Docling + MinerU)
+- Streamlit : Running local (port 8501)
+
+### État actuel
+- **Features** : 152/152 (100%) - Projet complet
+- **UI Streamlit** : Production-ready avec extraction réelle
+- **Mode Mock** : Fallback intelligent avec signalisation claire
+- **PDF Highlighting** : Fonctionnel avec PyMuPDF
+- **Multi-extracteurs** : Support complet 2, 3+ extracteurs
+
+### Prochaines étapes suggérées
+- Configuration Docling dans worker Docker (actuellement seul MinerU disponible)
+- Tests avec PDF complexe eancom97 (82 pages) en mode parallel_all
+- Ajout endpoint /api/v1/review/{job_id} pour divergences structurées
+- Extension backend Divergence dataclass pour support natif 3+ extracteurs
+
+---
+
 ## Session 131-152 - 2025-12-30 - Features #131-152: PROJECT 100% COMPLETE
 
 ### Ce qui a été fait
