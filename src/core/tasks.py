@@ -55,6 +55,33 @@ def _serialize_result(extraction_result: Dict[str, Any]) -> Dict[str, Any]:
             "average_confidence": extraction_result["aggregation"]["average_confidence"],
         }
 
+    # Serialize all_results if present (parallel strategies)
+    if "all_results" in extraction_result and extraction_result["all_results"]:
+        serialized["all_results"] = {}
+        for extractor_name, result in extraction_result["all_results"].items():
+            serialized["all_results"][extractor_name] = {
+                "markdown": result.markdown,
+                "confidence_score": result.confidence_score,
+                "extraction_time": result.extraction_time,
+                "success": result.success,
+                "extractor_name": result.extractor_name,
+                "extractor_version": result.extractor_version,
+            }
+
+    # Serialize divergences if present
+    if "divergences" in extraction_result and extraction_result["divergences"]:
+        serialized["divergences"] = []
+        for div in extraction_result["divergences"]:
+            serialized["divergences"].append({
+                "id": div.id,
+                "type": div.type.value if hasattr(div.type, 'value') else str(div.type),
+                "page": div.page,
+                "block_id": div.block_id,
+                "content_a": div.content_a,
+                "content_b": div.content_b,
+                "similarity": div.similarity,
+            })
+
     return serialized
 
 

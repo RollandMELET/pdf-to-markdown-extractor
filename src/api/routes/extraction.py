@@ -111,6 +111,8 @@ class ResultResponse(BaseModel):
     result: Optional[Dict[str, Any]] = None
     complexity: Optional[Dict[str, Any]] = None
     aggregation: Optional[Dict[str, Any]] = None
+    all_results: Optional[Dict[str, Any]] = None  # Results from all extractors (parallel strategies)
+    divergences: Optional[List[Dict[str, Any]]] = None  # Detected divergences for review
 
 
 class ArbitrationChoice(BaseModel):
@@ -351,6 +353,8 @@ async def get_extraction_result(job_id: str) -> ResultResponse:
         result=result_data.get("result"),
         complexity=result_data.get("complexity"),
         aggregation=result_data.get("aggregation"),
+        all_results=result_data.get("all_results"),  # Include all extractor results
+        divergences=result_data.get("divergences"),  # Include detected divergences
     )
 
 
